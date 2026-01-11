@@ -1017,6 +1017,7 @@ void NPC_ConfigSetup()
 	Construction_Raid_Zilius_OnMapStart();
 	ZeinaPrisoner_OnMapStart_NPC();
 
+	
 	// Gmod ZS
 	ZSZombie_OnMapStart_NPC();
 	ZSHeadcrab_OnMapStart_NPC();
@@ -1053,7 +1054,16 @@ void NPC_ConfigSetup()
 	Zsvulture_OnMapStart_NPC();
 	ZsSoldier_Barrager_OnMapStart_NPC();
 	ZSoldierGrave_OnMapStart_NPC();
+	InfectedSniperjarate_Precache();
+	NinjaSpy_OnMapStart_NPC();
+	ZsUnspeakable_OnMapStart_NPC();
+	InfectedDemoMain_OnMapStart_NPC();
+	InfectedKamikaze_OnMapStart_NPC();
+	InfectedEngineer_OnMapStart_NPC();
 	Allymedic_OnMapStart_NPC();
+	Allysoldier_OnMapStart_NPC();
+	Allyheavy_OnMapStart_NPC();
+	AllySniper_OnMapStart_NPC();
 	
 	//Aperture
 	ApertureCombatant_OnMapStart_NPC();
@@ -2613,6 +2623,11 @@ Action NpcSpecificOnTakeDamage(int victim, int &attacker, int &inflictor, float 
 #include "npc/gmod_zs/45/npc_zs_zombie_spy.sp"
 #include "npc/gmod_zs/45/npc_zs_zombie_heavy.sp"
 #include "npc/gmod_zs/45/npc_zs_zombie_soldier.sp"
+#include "npc/gmod_zs/45/npc_zs_zombie_sniper_jarate.sp"
+#include "npc/gmod_zs/45/npc_zs_ninja_zombie_spy.sp"
+#include "npc/gmod_zs/45/npc_zs_zombie_demoknight.sp"
+#include "npc/gmod_zs/45/npc_zs_kamikaze_demo.sp"
+#include "npc/gmod_zs/45/npc_zs_zombie_engineer.sp"
 #include "npc/gmod_zs/npc_zs_zmain.sp"
 #include "npc/gmod_zs/special/npc_zs_flesh_creeper.sp"
 #include "npc/gmod_zs/special/npc_zs_nest.sp"
@@ -2622,4 +2637,8 @@ Action NpcSpecificOnTakeDamage(int victim, int &attacker, int &inflictor, float 
 #include "npc/gmod_zs/bosses/npc_zs_pregnant.sp"
 #include "npc/gmod_zs/bosses/npc_major_vulture.sp"
 #include "npc/gmod_zs/bosses/npc_zs_soldier_barrager.sp"
+#include "npc/gmod_zs/bosses/npc_zs_unspeakable.sp"
 #include "npc/gmod_zs/npc_zs_ally_medic.sp"
+#include "npc/gmod_zs/npc_zs_ally_soldier.sp"
+#include "npc/gmod_zs/npc_zs_ally_heavy.sp"
+#include "npc/gmod_zs/npc_zs_ally_sniper.sp"
