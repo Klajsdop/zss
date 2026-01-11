@@ -717,4 +717,10 @@
 		"en"		"An infected spy has appeared."
 		"ko"		"감염된 스파이가 등장했습니다."
 	}
+	"Poyo Spawned"
+	{
+		"en"		"It came here to spread the infection."
+		"ko"		"저것이 이곳에 감염을 퍼뜨리기 위해서 찾아왔습니다."
+	}
+	
 }
