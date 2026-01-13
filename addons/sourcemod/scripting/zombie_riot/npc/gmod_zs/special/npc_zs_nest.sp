@@ -155,7 +155,7 @@ methodmap Nest < CClotBody
 	
 	public Nest(float vecPos[3], float vecAng[3], int ally, const char[] data)
 	{
-		Nest npc = view_as<Nest>(CClotBody(vecPos, vecAng, NEST_CORE_MODEL, NEST_CORE_MODEL_SIZE, MinibossHealthScaling(200.0), ally, false,true,_,_,{30.0,30.0,200.0}, .NpcTypeLogic = 1));
+		Nest npc = view_as<Nest>(CClotBody(vecPos, vecAng, NEST_CORE_MODEL, NEST_CORE_MODEL_SIZE, MinibossHealthScaling(50.0), ally, false,true,_,_,{30.0,30.0,200.0}, .NpcTypeLogic = 1));
 		
 		i_NpcWeight[npc.index] = 999;
 		
@@ -243,32 +243,25 @@ static char g_20wave[][] = {
 };
 
 static char g_30wave[][] = {
-	"npc_kamikaze_demo",
-	"npc_medic_main",
-	"npc_zs_zombie_scout",
-	"npc_zs_zombie_soldier_pickaxe",
+	"npc_zs_kamikaze_demo",
+	"npc_zs_medic_healer",
+	"npc_zs_huntsman",
+	"npc_zs_zombie_demoknight",
+	"npc_zs_zombie_engineer",
 	"npc_zs_zombie_heavy",
-	"npc_zombie_soldier_grave",
-	"npc_sniper_main",
-	"npc_spy_half_cloacked_main",
-	"npc_zombie_demo_main",
+	"npc_zs_zombie_scout",
 	"npc_zs_zombie_sniper_jarate",
 	"npc_zs_zombie_soldier",
+	"npc_zs_zombie_soldier_pickaxe",
+	"npc_zs_zombie_spy",
+	"npc_zombie_pyro_giant_main",
+	"npc_zombie_scout_grave",
+	"npc_zombie_soldier_grave",
+	"npc_zombie_spy_grave",
+	"npc_zombie_demo_main",
+	"npc_zombie_heavy_grave",
 };
 
-static char g_40wave[][] = {
-	"npc_kamikaze_demo",
-	"npc_medic_main",
-	"npc_zs_zombie_scout",
-	"npc_zs_zombie_soldier_pickaxe",
-	"npc_zs_zombie_heavy",
-	"npc_zombie_soldier_grave",
-	"npc_sniper_main",
-	"npc_spy_half_cloacked_main",
-	"npc_zombie_demo_main",
-	"npc_zs_zombie_sniper_jarate",
-	"npc_zs_zombie_soldier",
-};
 public void Nest_ClotThink(int iNPC)
 {
 	Nest npc = view_as<Nest>(iNPC);
@@ -329,11 +322,6 @@ public void Nest_ClotThink(int iNPC)
 				AproxRandomSpaceToWalkTo[2] += 10.0;
 
 				char EnemyToSpawn[255];
-				int randomIndex = GetRandomInt(0, sizeof(g_10wave) - 1);
-				int randomIndexa = GetRandomInt(0, sizeof(g_20wave) - 1);
-				int randomIndexb = GetRandomInt(0, sizeof(g_30wave) - 1);
-				int randomIndexc = GetRandomInt(0, sizeof(g_40wave) - 1);
-				strcopy(EnemyToSpawn, sizeof(EnemyToSpawn), g_10wave[randomIndex]);
 				bool Construct = false;
 
 				if(GetTeam(iNPC) == TFTeam_Red)
@@ -341,26 +329,21 @@ public void Nest_ClotThink(int iNPC)
 					IncreaseSpawnRates *= 1.0; //way slower.
 				}
 				
-				if(i_currentwave[iNPC] < 10)
-				{
+				if(i_currentwave[iNPC] < 10) {
+					int idx = GetRandomInt(0, sizeof(g_10wave) - 1);
+					strcopy(EnemyToSpawn, sizeof(EnemyToSpawn), g_10wave[idx]);
+					IncreaseSpawnRates *= 0.8;
+				} 
+				else if(i_currentwave[iNPC] < 20) {
+					int idx = GetRandomInt(0, sizeof(g_20wave) - 1);
+					strcopy(EnemyToSpawn, sizeof(EnemyToSpawn), g_20wave[idx]);
 					IncreaseSpawnRates *= 0.8;
 				}
-				else if(i_currentwave[iNPC] < 20)
+				else if(i_currentwave[iNPC] < 41)
 				{
-					strcopy(EnemyToSpawn, sizeof(EnemyToSpawn), g_20wave[randomIndexa]);
+					int idx = GetRandomInt(0, sizeof(g_30wave) - 1);
+					strcopy(EnemyToSpawn, sizeof(EnemyToSpawn), g_30wave[idx]);
 					IncreaseSpawnRates *= 0.8;
-				}
-				else if(i_currentwave[iNPC] < 30)
-				{
-					//EnemyToSpawn = "npc_random_nest";
-					strcopy(EnemyToSpawn, sizeof(EnemyToSpawn), g_30wave[randomIndexb]);
-					IncreaseSpawnRates *= 0.8;
-				}
-				else if(i_currentwave[iNPC] < 40)
-				{
-					//EnemyToSpawn = "npc_random_nest";
-					IncreaseSpawnRates *= 0.75; //Swarm.
-					strcopy(EnemyToSpawn, sizeof(EnemyToSpawn), g_40wave[randomIndexc]);
 				}
 				
 				if(Rogue_Mode())

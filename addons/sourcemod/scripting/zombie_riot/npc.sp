@@ -1016,7 +1016,6 @@ void NPC_ConfigSetup()
 	Diversionistico_Elitus_OnMapStart_NPC();
 	Construction_Raid_Zilius_OnMapStart();
 	ZeinaPrisoner_OnMapStart_NPC();
-
 	
 	// Gmod ZS
 	ZSZombie_OnMapStart_NPC();
@@ -1064,7 +1063,7 @@ void NPC_ConfigSetup()
 	Allysoldier_OnMapStart_NPC();
 	Allyheavy_OnMapStart_NPC();
 	AllySniper_OnMapStart_NPC();
-	
+
 	//Aperture
 	ApertureCombatant_OnMapStart_NPC();
 	ApertureShotgunner_OnMapStart_NPC();

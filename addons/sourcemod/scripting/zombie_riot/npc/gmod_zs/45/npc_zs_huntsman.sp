@@ -231,7 +231,7 @@ public void ZSHuntsman_ClotThink(int iNPC)
 						npc.AddGesture("ACT_MP_ATTACK_STAND_ITEM2");
 						
 						npc.PlayMeleeSound();
-						int projectile = npc.FireArrow(vecTarget, 300.0, 1200.0);
+						int projectile = npc.FireArrow(vecTarget, 200.0, 1200.0);
 						npc.m_flNextMeleeAttack = GetGameTime(npc.index) + 1.5;
 						WandProjectile_ApplyFunctionToEntity(projectile, ZSHuntsman_Particle_StartTouch);
 					}

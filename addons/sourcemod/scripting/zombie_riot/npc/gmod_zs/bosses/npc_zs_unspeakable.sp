@@ -57,12 +57,13 @@ static const char g_SuicideSound[][] = {
 
 static int i_LaserEntityIndex[MAXENTITIES]={-1, ...};
 
-static int NpcID;
+//static int NpcID;
 
-int ZsUnspeakableNpcID()
+//다른 코드에서 해당 NPC가 있는지 감지할때 쓰는거라 쓰이지않는 다면 지우기
+/*int ZsUnspeakableNpcID()
 {
 	return NpcID;
-}
+}*/
 
 void ZsUnspeakable_OnMapStart_NPC()
 {
@@ -75,7 +76,8 @@ void ZsUnspeakable_OnMapStart_NPC()
 	data.Category = Type_Raid;
 	data.Func = ClotSummon;
 	data.Precache = ClotPrecache;
-	NpcID = NPC_Add(data);
+	//NpcID = NPC_Add(data);
+	NPC_Add(data);
 	Zero(i_LaserEntityIndex);
 }
 
@@ -382,7 +384,7 @@ methodmap ZsUnspeakable < CClotBody
 			}
 			
 			int color[4] = { 150, 255, 150, 255 };
-			SetCustomFog(FogType_NPC, color, color, 400.0, 1000.0, 0.85);
+			SetCustomFog(FogType_NPC, color, color, 400.0, 1000.0, 0.3);
 		}
 		EmitSoundToAll("npc/zombie_poison/pz_alert1.wav", _, _, _, _, 1.0, 80);	
 		EmitSoundToAll("npc/zombie_poison/pz_alert1.wav", _, _, _, _, 1.0, 80);	
@@ -814,8 +816,9 @@ float ZsUnspeakable_Absorber(int entity, int victim, float damage, int weapon)
 }
 bool ZsUnspeakable_TeleToAnyAffectedOnVoid(ZsUnspeakable npc)
 {
+	float GameTime = GetGameTime(npc.index);
     // 1. 쿨다운 확인
-    if(npc.m_flJumpCooldown < GetGameTime(npc.index))
+    if(npc.m_flJumpCooldown < GameTime)
     {
         static float hullcheckmaxs[3];
         static float hullcheckmins[3];
@@ -834,53 +837,61 @@ bool ZsUnspeakable_TeleToAnyAffectedOnVoid(ZsUnspeakable npc)
                 GetEntPropVector(EnemyLoop, Prop_Data, "m_vecAbsOrigin", targetPos);
 
                 // 2. 거리 계산 (보스와 대상 사이의 거리)
-                float flDistance = GetVectorDistance(npcPos, targetPos);
+                float flDistance = GetVectorDistance(npcPos, targetPos, true);
+				if(flDistance < (500.0 * 500.0))
+				{
+					//아무나 500Hu 내에 존재하면 쿨 1초 초기화하고 For 종료
+					npc.m_flJumpCooldown = GameTime + 1.0;
+					break;
+				}
+				// 거리가 500 유닛 이상인 경우에만 발동
+				// 예측 불가능성을 위해 무작위 확률 추가 (선택 사항, 필요 없으면 제거 가능)
+				if(GetRandomFloat(0.0, 1.0) > 0.3)
+					continue;
 
-                // 거리가 1000 유닛 이상인 경우에만 발동
-                if(flDistance >= 500.0)
-                {
-                    // 예측 불가능성을 위해 무작위 확률 추가 (선택 사항, 필요 없으면 제거 가능)
-                    if(GetRandomFloat(0.0, 1.0) > 0.3)
-                    {
-                        continue;
-                    }
+				float PreviousPos[3];
+				WorldSpaceCenter(npc.index, PreviousPos);
 
-                    float PreviousPos[3];
-                    WorldSpaceCenter(npc.index, PreviousPos);
+				// 3. 대상의 위치 근처및 뒷텔 순간이동 좌표 계산
+				float vecTarget[3];
+				WorldSpaceCenter(EnemyLoop, vecTarget);
+				/*vecTarget[0] += (GetRandomInt(0, 1)) ? -60.0 : 60.0;
+				vecTarget[1] += (GetRandomInt(0, 1)) ? -60.0 : 60.0;*/
+				PredictSubjectPosition(npc, EnemyLoop,_,_, vecTarget);
+				vecTarget = GetBehindTarget(EnemyLoop, 30.0 ,vecTarget);
+				
+				// 4. 안전 검사 및 이동
+				bool Succeed = Npc_Teleport_Safe(npc.index, vecTarget, hullcheckmins, hullcheckmaxs, true);
+				if(Succeed)
+				{
+					npc.PlayTeleportSound();
+					ParticleEffectAt(PreviousPos, "teleported_blue", 0.5);
+					
+					float WorldSpaceVec[3]; 
+					WorldSpaceCenter(npc.index, WorldSpaceVec);
+					ParticleEffectAt(WorldSpaceVec, "teleported_blue", 0.5);
+					
+					// 대상 방향으로 시선 고정
+					float VecEnemy[3]; WorldSpaceCenter(EnemyLoop, VecEnemy);
+					npc.FaceTowards(VecEnemy, 15000.0);
+					
+					// 밸런스 조정: 순간이동 직후 근접 공격 딜레이
+					npc.m_flNextMeleeAttack = GameTime + 0.0;
+					npc.m_flJumpCooldown = GameTime + 3.0; // 쿨다운을 15초로 설정
+					
+					int color[4] = {150, 255, 150, 255};
+					TE_SetupBeamPoints(PreviousPos, WorldSpaceVec, Shared_BEAM_Laser, 0, 0, 0, 0.35, 2.0, 5.0, 0, 5.0, color, 3);
+					TE_SendToAll(0.0);
+					
+					//뒷텔 대상을 공격하도록 m_iTarget 덮어씌우기
+					npc.m_iTarget = EnemyLoop;
+					npc.m_flGetClosestTargetTime = GameTime + GetRandomRetargetTime();
 
-                    // 3. 대상의 위치 근처로 순간이동 좌표 계산
-                    float vecTarget[3];
-                    WorldSpaceCenter(EnemyLoop, vecTarget);
-                    vecTarget[0] += (GetRandomInt(0, 1)) ? -60.0 : 60.0;
-                    vecTarget[1] += (GetRandomInt(0, 1)) ? -60.0 : 60.0;
-                    
-                    // 4. 안전 검사 및 이동
-                    bool Succeed = Npc_Teleport_Safe(npc.index, vecTarget, hullcheckmins, hullcheckmaxs, true);
-                    if(Succeed)
-                    {
-                        npc.PlayTeleportSound();
-                        ParticleEffectAt(PreviousPos, "teleported_blue", 0.5);
-                        
-                        float WorldSpaceVec[3]; 
-                        WorldSpaceCenter(npc.index, WorldSpaceVec);
-                        ParticleEffectAt(WorldSpaceVec, "teleported_blue", 0.5);
-                        
-                        // 대상 방향으로 시선 고정
-                        float VecEnemy[3]; WorldSpaceCenter(EnemyLoop, VecEnemy);
-                        npc.FaceTowards(VecEnemy, 15000.0);
-                        
-                        // 밸런스 조정: 순간이동 직후 근접 공격 딜레이
-                        npc.m_flNextMeleeAttack = GetGameTime(npc.index) + 0.0;
-                        npc.m_flJumpCooldown = GetGameTime(npc.index) + 3.0; // 쿨다운을 15초로 설정
-                        
-						int color[4] = {150, 255, 150, 255};
-                        TE_SetupBeamPoints(PreviousPos, WorldSpaceVec, Shared_BEAM_Laser, 0, 0, 0, 0.35, 2.0, 5.0, 0, 5.0, color, 3);
-                        TE_SendToAll(0.0);
-
-                        // 대상에게 알림
-                        return true;
-                    }
-                }
+					// 대상에게 알림
+					return true;
+				}
+				//텔포 실패시, 1초뒤 재시도
+				npc.m_flJumpCooldown = GameTime + 1.0;
             }
         }
     }

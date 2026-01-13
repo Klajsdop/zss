@@ -178,11 +178,11 @@ methodmap ZSFastZombie < CClotBody
 		
 		func_NPCDeath[npc.index] = ZSFastZombie_NPCDeath;
 		func_NPCThink[npc.index] = ZSFastZombie_ZSFastZombieThink;	
-		func_NPCOnTakeDamage[npc.index] = Generic_OnTakeDamage;	
+		func_NPCOnTakeDamage[npc.index] = ZSFastZombie_OnTakeDamage;	
 		
 		
 		//IDLE
-		npc.m_flSpeed = 336.6;
+		npc.m_flSpeed = 400.0;
 		npc.m_flGetClosestTargetTime = 0.0;
 		npc.m_flJumpCooldown = GetGameTime(npc.index) + 3.0;
 		npc.m_flInJump = 0.0;
@@ -330,6 +330,40 @@ public void ZSFastZombie_ZSFastZombieThink(int iNPC)
 		npc.m_iTarget = GetClosestTarget(npc.index);
 	}
 	npc.PlayIdleAlertSound();
+}
+
+public Action ZSFastZombie_OnTakeDamage(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &weapon, float damageForce[3], float damagePosition[3], int damagecustom)
+{
+	//Valid attackers only.
+	if(attacker <= 0)
+		return Plugin_Continue;
+		
+	ZSFastZombie npc = view_as<ZSFastZombie>(victim);
+	
+	if(!NpcStats_IsEnemySilenced(victim))
+	{
+		if(!npc.bXenoInfectedSpecialHurt)
+		{
+			npc.bXenoInfectedSpecialHurt = true;
+			damage = 0.0;
+			EmitSoundToAll("physics/metal/metal_box_impact_bullet1.wav", attacker, SNDCHAN_STATIC, NORMAL_ZOMBIE_SOUNDLEVEL, _, 0.5);
+			return Plugin_Changed;
+		}
+	}
+	
+	/*
+	if(attacker > MaxClients && !IsValidEnemy(npc.index, attacker))
+		return Plugin_Continue;
+	*/
+	
+	if (npc.m_flHeadshotCooldown < GetGameTime(npc.index))
+	{
+		npc.m_flHeadshotCooldown = GetGameTime(npc.index) + DEFAULT_HURTDELAY;
+		npc.PlayHurtSound();
+		
+	}
+	
+	return Plugin_Changed;
 }
 
 public void ZSFastZombie_NPCDeath(int entity)

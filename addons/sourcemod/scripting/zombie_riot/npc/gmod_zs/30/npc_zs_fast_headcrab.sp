@@ -97,7 +97,7 @@ methodmap FastHeadcrab < CSeaBody
 		func_NPCOnTakeDamage[npc.index] = FastHeadcrab_OnTakeDamage;
 		func_NPCThink[npc.index] = FastHeadcrab_ClotThink;
 		
-		npc.m_flSpeed = 300.0;	// 1.9 x 250
+		npc.m_flSpeed = 400.0;	// 1.9 x 250
 		npc.m_flGetClosestTargetTime = 0.0;
 		npc.m_flNextMeleeAttack = 0.0;
 		npc.m_flAttackHappens = 0.0;

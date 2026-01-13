@@ -128,7 +128,7 @@ methodmap ZSZombie < CClotBody
 		npc.m_flSpeed = 260.0;
 		func_NPCDeath[npc.index] = ZSZombie_NPCDeath;
 		func_NPCThink[npc.index] = ZSZombie_ClotThink;
-		func_NPCOnTakeDamage[npc.index] = Generic_OnTakeDamage;
+		func_NPCOnTakeDamage[npc.index] = ZSZombie_OnTakeDamage;
 
 		npc.StartPathing();
 		
@@ -252,6 +252,56 @@ public void ZSZombie_ClotThink(int iNPC)
 		npc.m_iTarget = GetClosestTarget(npc.index);
 	}
 	npc.PlayIdleSound();
+}
+
+public Action ZSZombie_OnTakeDamage(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &weapon, float damageForce[3], float damagePosition[3], int damagecustom)
+{
+	//Valid attackers only.
+	if(attacker <= 0)
+		return Plugin_Continue;
+
+	ZSZombie npc = view_as<ZSZombie>(victim);
+	if(!NpcStats_IsEnemySilenced(victim))
+	{
+		if(!npc.bXenoInfectedSpecialHurt)
+		{
+			npc.bXenoInfectedSpecialHurt = true;
+			npc.flXenoInfectedSpecialHurtTime = GetGameTime(npc.index) + 5.0;
+			SetEntityRenderMode(npc.index, RENDER_NORMAL);
+			SetEntityRenderColor(npc.index, 255, 0, 0, 255);
+			npc.m_flSpeed = 320.0;
+			CreateTimer(5.0, ZSZombie_Revert_Zombie_Resistance, EntIndexToEntRef(victim), TIMER_FLAG_NO_MAPCHANGE);
+			CreateTimer(10.0, ZSZombie_Revert_Zombie_Resistance_Enable, EntIndexToEntRef(victim), TIMER_FLAG_NO_MAPCHANGE);
+		}
+	}
+	if (npc.m_flHeadshotCooldown < GetGameTime(npc.index))
+	{
+		npc.m_flHeadshotCooldown = GetGameTime(npc.index) + DEFAULT_HURTDELAY;
+		npc.m_blPlayHurtAnimation = true;
+	}
+	
+	return Plugin_Changed;
+}
+public Action ZSZombie_Revert_Zombie_Resistance(Handle timer, int ref)
+{
+	int zombie = EntRefToEntIndex(ref);
+	if(IsValidEntity(zombie))
+	{
+		SetEntityRenderMode(zombie, RENDER_NORMAL);
+		SetEntityRenderColor(zombie, 255, 255, 255, 255);
+	}
+	return Plugin_Handled;
+}
+
+public Action ZSZombie_Revert_Zombie_Resistance_Enable(Handle timer, int ref)
+{
+	int zombie = EntRefToEntIndex(ref);
+	if(IsValidEntity(zombie))
+	{
+		ZSZombie npc = view_as<ZSZombie>(zombie);
+		npc.bXenoInfectedSpecialHurt = false;
+	}
+	return Plugin_Handled;
 }
 
 public void ZSZombie_NPCDeath(int entity)

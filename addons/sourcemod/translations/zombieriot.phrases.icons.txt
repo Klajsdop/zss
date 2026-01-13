@@ -714,8 +714,13 @@
 	}
 	"Infected Spy Spawn"
 	{
-		"en"		"An infected spy has appeared."
+		"en"		"An Infected Spy has appeared."
 		"ko"		"감염된 스파이가 등장했습니다."
+	}
+	"Infected Ninja Spy Spawn"
+	{
+		"en"		"An Infected Ninja Spy has appeared."
+		"ko"		"감염된 닌자 스파이가 등장했습니다."
 	}
 	"Poyo Spawned"
 	{

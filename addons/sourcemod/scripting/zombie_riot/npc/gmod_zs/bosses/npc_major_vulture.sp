@@ -126,6 +126,14 @@ methodmap Zsvulture < CClotBody
 		npc.m_flMeleeArmor = 0.2;
 		npc.m_flRangedArmor = 1.5;
 		
+		if(!IsValidEntity(RaidBossActive))
+		{
+			RaidBossActive = EntIndexToEntRef(npc.index);
+			RaidModeTime = GetGameTime(npc.index) + 9000.0;
+			RaidModeScaling = 0.0;
+			RaidAllowsBuildings = true;
+		}
+		
 		int skin = 5;
 		SetEntProp(npc.index, Prop_Send, "m_nSkin", skin);
 
@@ -255,7 +263,7 @@ int ZsvultureSelfDefense(Zsvulture npc, float gameTime, int target, float distan
 				npc.m_iTarget = Enemy_I_See;
 				npc.PlayMeleeHitSound();
 				float vecTarget[3]; WorldSpaceCenter(target, vecTarget);
-				int projectile = npc.FireParticleRocket(vecTarget, 12.0, 1000.0, 150.0, "unusual_icetornado_blue_parent", true);
+				int projectile = npc.FireParticleRocket(vecTarget, 30.0, 1000.0, 150.0, "superrare_burning1", true);
 				int particle = EntRefToEntIndex(i_WandParticle[projectile]);
 				CreateTimer(0.5, Timer_RemoveEntity, EntIndexToEntRef(projectile), TIMER_FLAG_NO_MAPCHANGE);
 				CreateTimer(0.5, Timer_RemoveEntity, EntIndexToEntRef(particle), TIMER_FLAG_NO_MAPCHANGE);
@@ -380,7 +388,8 @@ public void Zsvulture_Rocket_Particle_StartTouch(int entity, int target)
 			DamageDeal *= h_BonusDmgToSpecialArrow[entity];
 
 
-		SDKHooks_TakeDamage(target, owner, inflictor, DamageDeal, DMG_TRUEDAMAGE|DMG_PREVENT_PHYSICS_FORCE, -1);	//acts like a kinetic rocket
+		SDKHooks_TakeDamage(target, owner, inflictor, DamageDeal, DMG_BULLET|DMG_PREVENT_PHYSICS_FORCE, -1);	//acts like a kinetic rocket
+		NPC_Ignite(target, owner,12.0, -1, 8.0);
 		int particle = EntRefToEntIndex(i_WandParticle[entity]);
 		if(IsValidEntity(particle))
 		{

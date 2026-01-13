@@ -100,6 +100,14 @@ methodmap Pregnant < CClotBody
 		func_NPCOnTakeDamage[npc.index] = Pregnant_OnTakeDamage;
 		func_NPCThink[npc.index] = Pregnant_ClotThink;
 		
+		if(!IsValidEntity(RaidBossActive))
+		{
+			RaidBossActive = EntIndexToEntRef(npc.index);
+			RaidModeTime = GetGameTime(npc.index) + 9000.0;
+			RaidModeScaling = 0.0;
+			RaidAllowsBuildings = true;
+		}
+		
 		npc.m_flSpeed = 250.0;	// 0.5 x 250
 		npc.m_flGetClosestTargetTime = 0.0;
 		npc.m_flNextMeleeAttack = 0.0;
