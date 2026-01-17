@@ -2018,6 +2018,26 @@
 		"it"		"Arcieri d'élite medievali"
 		"ko"		"중세 정예 장궁병"
 	}
+	"Golden Squad Construct"
+	{
+		"en"		"Golden Squad Construct"
+		"ko"		"황금 부대 고대 조각상"
+	}
+	"Golden Squad Swordsman"
+	{
+		"en"		"Golden Squad Swordsman"
+		"ko"		"황금 부대 검병"
+	}
+	"Golden Squad Crossbowman"
+	{
+		"en"		"Golden Squad Crossbowman"
+		"ko"		"황금 부대 석궁병"
+	}
+	"Golden Squad Eagleman"
+	{
+		"en"		"Golden Squad Eagleman"
+		"ko"		"황금 부대 독수리 전사"
+	}
 	"Trebuchet"
 	{
 		"en"		"Trebuchet"
@@ -5848,16 +5868,6 @@
 		"en"	"=Failed name="
 		"ko"	"=Failed name="
 	}
-	"Captino Menius"
-	{
-		"en"	"Captino Menius"
-		"ko"	"캡티노 메니우스"
-	}
-	"0h No it's Not Fair"
-	{
-		"en"	"=Failed name="
-		"ko"	"=Failed name="
-	}
 	"Agent John"
 	{
 		"en"		"Agent John"
@@ -7476,7 +7486,7 @@
 	{
 		"en"	"U̵͌m̴b̷r̵ã̶̺l̶̡͘ ̷͓̈́R̸e̷f̵̞͘ra̷͖͛c̵͊ţ̷͝"
 		"it"	"U̵͌m̴b̷r̵ã̶̺l̶̡͘ ̷͓̈́R̸e̷f̵̞͘ra̷͖͛c̵͊ţ̷͝"
-		"ko"	"움̵͌브̴̷랄̶̶̡̺̃͘ ̷̸͓̈́굴̷절̵̞͘수̵̷̷̨̧͖͛̕͝"
+		"ko"	"움̵͌브̴̷랄̶̶̡̺̃͘ ̷̸͓̈́리̷프̵̞͘랙̵̨̕트̷̷̧͖͛͝"
 	}
 	"Umbral Refract Desc"
 	{
@@ -7554,13 +7564,13 @@
 	{
 		"en"	"Shadowing Darkness, The Ruler"
 		"it"	"L'ombra delle tenebre, il dominatore"
-		"ko"	"통치자, ''그림자 응달''"
+		"ko"	"지배자 ''그림자 응달''"
 	}
 	"Shadowing Darkness, The Ruler Desc"
 	{
 		"en"	"Ruler of the Umbrals. Keeper of the Purgatory Throne. Culprit behind the Void outbreaks. \nTrapped inside the Curtain, she lost her mind long ago. \nShe must be stopped at all costs.\nShe gives necrosis on most of her abilities."
 		"it"	"Sovrano degli Umbral. Custode del Trono del Purgatorio. Responsabile delle epidemie del Vuoto. \nIntrappolata nella cortina, ha perso la ragione molto tempo fa. \nDeve essere fermata a tutti i costi.\nDà necrosi alla maggior parte delle sue abilità."
-		"en"	"움브랄의 통치자이자, 연옥 왕좌의 파수꾼입니다. 공허 재앙 발발의 장본인입니다.\n 장막 속에 갇힌 그녀는 오래 전에 이성을 잃었습니다.\n무슨 수를 써서라도 막아내야만 합니다.\n대부분의 능력이 적들에게 쇠약 원소 피해를 부여합니다."
+		"ko"	"움브랄의 지배자이자, 연옥 왕좌의 파수꾼입니다. 공허 재앙 발발의 장본인입니다.\n 장막 속에 갇힌 그녀는 오래 전에 이성을 잃었습니다.\n무슨 수를 써서라도 막아내야만 합니다.\n대부분의 능력이 적들에게 쇠약 원소 피해를 부여합니다."
 	}
 	"Almagest Researcher"
 	{
@@ -7840,5 +7850,27 @@
 	{
 		"en"	"Infected Jarate Sniper"
 		"ko"	"감염된 병수도 스나이퍼"
+	}
+	"ZS Eradicator"
+	{
+		"en"	"Eradicator"
+		"ko"	"말살자"
+	}
+	"ZS Howler"
+	{
+		"en"	"Howler"
+		"ko"	"하울러"
+	}
+	"Pheromone Elemental Damage"
+	{
+		"en"	"Corruption Elemental Damage"
+		"es"	"Daño Elemental Corrupto"
+		"it"	"Danno elementare da corruzione"
+		"ko"	"페로몬 원소 피해"
+	}
+	"Pheromone Elemental Damage Desc"
+	{
+		"en"	""Elemental damage gauge full.\nPheromones leaking from your body are attracting nearby infected.""
+		"ko"	"원소 피해 게이지가 꽉 차면, 당신의 몸에서 흘러나오는 페로몬으로 인해서\n주변의 감염체들이 몰려옵니다."
 	}
 }

@@ -689,6 +689,9 @@ void NPC_ConfigSetup()
 //Special
 	CyberGrindGM_OnMapStart_NPC();
 	Invisible_TRIGGER_Man_OnMapStart_NPC();
+	CyberMessenger_OnMapStart_NPC();
+	TrueCyberWarrior_OnMapStart();
+	VillageAlaxios_OnMapStart();
 
 //special
 	Invisible_TRIGGER_OnMapStart_NPC();//It is currently used as a trigger for the Victoria Factory.
@@ -1194,7 +1197,6 @@ void NPC_ConfigSetup()
 	Pregnant_Precache();
 	ZSHeadcrabZombie_OnMapStart_NPC();
 	ZSFastheadcrabZombie_OnMapStart_NPC();
-	NestSummonRandom_OnMapStart_NPC();
 	ZsSpitter_Precache();
 	Zsrunner_Precache();
 	ZSsoldierOnMapStart();
@@ -1210,6 +1212,8 @@ void NPC_ConfigSetup()
 	InfectedDemoMain_OnMapStart_NPC();
 	InfectedKamikaze_OnMapStart_NPC();
 	InfectedEngineer_OnMapStart_NPC();
+	Eradicator_OnMapStart_NPC();
+	ZSHowler_OnMapStart_NPC();
 	ZSSphynx_OnMapStart_NPC();
 	ZSNightmare_OnMapStart_NPC();
 	ZSMedicHealer_OnMapStart_NPC();
@@ -2356,6 +2360,9 @@ Action NpcSpecificOnTakeDamage(int victim, int &attacker, int &inflictor, float 
 //Special
 #include "npc/baka/npc_cybergrind_gm.sp"
 #include "npc/baka/npc_invisible_trigger_man.sp"
+#include "npc/baka/raidbosses/npc_cyber_messenger.sp"
+#include "npc/baka/raidbosses/npc_true_cyber_warrior.sp"
+#include "npc/baka/raidbosses/npc_village_god_alaxios.sp"
 
 //Matrix Enemies
 #include "npc/matrix/15/npc_agentalan.sp"
@@ -2634,12 +2641,13 @@ Action NpcSpecificOnTakeDamage(int victim, int &attacker, int &inflictor, float 
 #include "npc/gmod_zs/45/npc_zs_zombie_engineer.sp"
 #include "npc/gmod_zs/45/npc_zs_medic_healer.sp"
 #include "npc/gmod_zs/45/npc_zs_huntsman.sp"
+#include "npc/gmod_zs/60/npc_zs_eradicator.sp"
 #include "npc/gmod_zs/npc_zs_zmain.sp"
 #include "npc/gmod_zs/special/npc_zs_flesh_creeper.sp"
 #include "npc/gmod_zs/special/npc_zs_nest.sp"
-#include "npc/gmod_zs/special/npc_random_nest.sp"
 #include "npc/gmod_zs/special/npc_random_zombie.sp"
 #include "npc/gmod_zs/special/npc_zs_amplification.sp"
+#include "npc/gmod_zs/special/npc_zs_howler.sp"
 #include "npc/gmod_zs/bosses/npc_zs_nightmare.sp"
 #include "npc/gmod_zs/bosses/npc_zs_sphynx.sp"
 #include "npc/gmod_zs/bosses/npc_zs_pregnant.sp"

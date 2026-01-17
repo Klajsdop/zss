@@ -40,7 +40,7 @@ public void Ghoul_OnMapStart_NPC()
 	Zombie_Shared_PheromonePrecache();
 
 	PrecacheSound("player/flow.wav");
-	PrecacheModel("models/zombie_riot/gmod_zs/corpse1.mdl");
+	PrecacheModel("models/zombie_riot/gmod_zs/zs_zombie_models_1_1.mdl");
 	NPCData data;
 	strcopy(data.Name, sizeof(data.Name), "Ghoul");
 	strcopy(data.Plugin, sizeof(data.Plugin), "npc_zs_ghoul");
@@ -94,7 +94,7 @@ methodmap Ghoul < CClotBody
 	
 	public Ghoul(float vecPos[3], float vecAng[3], int ally)
 	{
-		Ghoul npc = view_as<Ghoul>(CClotBody(vecPos, vecAng, "models/zombie_riot/gmod_zs/corpse1.mdl", "1.15", "800", ally, false));
+		Ghoul npc = view_as<Ghoul>(CClotBody(vecPos, vecAng, "models/zombie_riot/gmod_zs/zs_zombie_models_1_1.mdl", "1.15", "800", ally, false));
 		
 		i_NpcWeight[npc.index] = 1;
 		
@@ -129,6 +129,10 @@ public void Ghoul_ClotThink(int iNPC)
 	{
 		return;
 	}
+	
+	SetEntProp(npc.index, Prop_Send, "m_nBody", GetEntProp(npc.index, Prop_Send, "m_nBody"));
+	SetVariantInt(16);
+	AcceptEntityInput(iNPC, "SetBodyGroup");
 	
 	npc.m_flNextDelayTime = GetGameTime(npc.index) + DEFAULT_UPDATE_DELAY_FLOAT;
 	

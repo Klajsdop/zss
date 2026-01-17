@@ -64,7 +64,7 @@ public void ZSFastheadcrabZombie_OnMapStart_NPC()
 	for (int i = 0; i < (sizeof(g_PlayMeleeJumpSound));   i++) { PrecacheSound(g_PlayMeleeJumpSound[i]);   }
 	for (int i = 0; i < (sizeof(g_leap_scream));   i++) { PrecacheSound(g_leap_scream[i]);   }
 	for (int i = 0; i < (sizeof(g_leap_prepare));   i++) { PrecacheSound(g_leap_prepare[i]);   }
-	PrecacheModel("models/zombie_riot/gmod_zs/fast/fast.mdl");
+	PrecacheModel("models/zombie/fast.mdl");
 	NPCData data;
 	strcopy(data.Name, sizeof(data.Name), "Fast Zombie");
 	strcopy(data.Plugin, sizeof(data.Plugin), "npc_zs_fastheadcrab_zombie");

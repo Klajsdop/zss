@@ -75,7 +75,7 @@ public void Bastardzine_OnMapStart_NPC()
 	for (int i = 0; i < (sizeof(g_PlayMeleeJumpSound));   i++) { PrecacheSound(g_PlayMeleeJumpSound[i]);   }
 	for (int i = 0; i < (sizeof(g_leap_scream));   i++) { PrecacheSound(g_leap_scream[i]);   }
 	for (int i = 0; i < (sizeof(g_leap_prepare));   i++) { PrecacheSound(g_leap_prepare[i]);   }
-	PrecacheModel("models/zombie_riot/gmod_zs/bastardzine/bastardzine.mdl");
+	PrecacheModel("models/zombie_riot/gmod_zs/zs_zombie_models_1_1.mdl");
 	NPCData data;
 	strcopy(data.Name, sizeof(data.Name), "Bastardzine");
 	strcopy(data.Plugin, sizeof(data.Plugin), "npc_zs_bastardzine");
@@ -172,7 +172,7 @@ methodmap Bastardzine < CClotBody
 	
 	public Bastardzine(float vecPos[3], float vecAng[3], int ally)
 	{
-		Bastardzine npc = view_as<Bastardzine>(CClotBody(vecPos, vecAng, "models/zombie_riot/gmod_zs/bastardzine/bastardzine.mdl", "1.15", "15000", ally, false));
+		Bastardzine npc = view_as<Bastardzine>(CClotBody(vecPos, vecAng, "models/zombie_riot/gmod_zs/zs_zombie_models_1_1.mdl", "1.15", "15000", ally, false));
 		
 		i_NpcWeight[npc.index] = 1;
 		
@@ -181,7 +181,11 @@ methodmap Bastardzine < CClotBody
 		int iActivity = npc.LookupActivity("ACT_HL2MP_RUN_ZOMBIE_FAST");
 		if(iActivity > 0) npc.StartActivity(iActivity);
 		
-		
+		npc.m_iWearable1 = npc.EquipItem("weapon_bone", "models/zombie_riot/gmod_zs/zs_zombie_models_1_1.mdl");
+		SetVariantString("1.0");
+		AcceptEntityInput(npc.m_iWearable1, "SetModelScale");
+		SetEntityRenderMode(npc.m_iWearable1, RENDER_TRANSCOLOR);
+		SetEntityRenderColor(npc.m_iWearable1, 150, 255, 150, 255);
 		
 		npc.m_iBleedType = BLEEDTYPE_NORMAL;
 		npc.m_iStepNoiseType = STEPSOUND_NORMAL;	
@@ -212,9 +216,11 @@ methodmap Bastardzine < CClotBody
 public void Bastardzine_BastardzineThink(int iNPC)
 {
 	Bastardzine npc = view_as<Bastardzine>(iNPC);
-
+	
+	SetEntProp(npc.index, Prop_Send, "m_nBody", GetEntProp(npc.index, Prop_Send, "m_nBody"));
 	SetVariantInt(1);
 	AcceptEntityInput(iNPC, "SetBodyGroup");
+	SetEntProp(npc.m_iWearable1, Prop_Send, "m_nBody", 2);
 	
 	if(npc.m_flNextDelayTime > GetGameTime(npc.index))
 	{
@@ -372,6 +378,9 @@ public void Bastardzine_NPCDeath(int entity)
 	{
 		npc.PlayDeathSound();	
 	}
+	
+	if(IsValidEntity(npc.m_iWearable1))
+		RemoveEntity(npc.m_iWearable1);
 	
 //	AcceptEntityInput(npc.index, "KillHierarchy");
 }

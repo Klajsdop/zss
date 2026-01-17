@@ -45,7 +45,7 @@ public void Skeleton_OnMapStart_NPC()
 	for (int i = 0; i < (sizeof(g_MeleeMissSounds));   i++) { PrecacheSound(g_MeleeMissSounds[i]);   }
 
 	PrecacheSound("player/flow.wav");
-	PrecacheModel("models/zombie_riot/gmod_zs/skeleton/skeleton.mdl");
+	PrecacheModel("models/zombie_riot/gmod_zs/zs_zombie_models_1_1.mdl");
 	NPCData data;
 	strcopy(data.Name, sizeof(data.Name), "Skeleton");
 	strcopy(data.Plugin, sizeof(data.Plugin), "npc_zs_skeleton");
@@ -96,7 +96,7 @@ methodmap Skeleton < CClotBody
 	
 	public Skeleton(float vecPos[3], float vecAng[3], int ally)
 	{
-		Skeleton npc = view_as<Skeleton>(CClotBody(vecPos, vecAng, "models/zombie_riot/gmod_zs/skeleton/skeleton.mdl", "1.15", "800", ally, false));
+		Skeleton npc = view_as<Skeleton>(CClotBody(vecPos, vecAng, "models/zombie_riot/gmod_zs/zs_zombie_models_1_1.mdl", "1.15", "800", ally, false));
 		
 		i_NpcWeight[npc.index] = 1;
 		
@@ -134,6 +134,10 @@ public void Skeleton_ClotThink(int iNPC)
 	{
 		return;
 	}
+	
+	SetEntProp(npc.index, Prop_Send, "m_nBody", GetEntProp(npc.index, Prop_Send, "m_nBody"));
+	SetVariantInt(64);
+	AcceptEntityInput(iNPC, "SetBodyGroup");
 	
 	npc.m_flNextDelayTime = GetGameTime(npc.index) + DEFAULT_UPDATE_DELAY_FLOAT;
 	

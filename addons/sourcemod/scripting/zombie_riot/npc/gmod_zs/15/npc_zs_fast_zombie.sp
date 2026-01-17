@@ -64,7 +64,7 @@ public void ZSFastZombie_OnMapStart_NPC()
 	for (int i = 0; i < (sizeof(g_PlayMeleeJumpSound));   i++) { PrecacheSound(g_PlayMeleeJumpSound[i]);   }
 	for (int i = 0; i < (sizeof(g_leap_scream));   i++) { PrecacheSound(g_leap_scream[i]);   }
 	for (int i = 0; i < (sizeof(g_leap_prepare));   i++) { PrecacheSound(g_leap_prepare[i]);   }
-	PrecacheModel("models/zombie_riot/gmod_zs/fast/fast.mdl");
+	PrecacheModel("models/zombie_riot/gmod_zs/zs_zombie_models_1_1.mdl");
 	NPCData data;
 	strcopy(data.Name, sizeof(data.Name), "Fast Zombie");
 	strcopy(data.Plugin, sizeof(data.Plugin), "npc_zs_fast_zombie");
@@ -161,7 +161,7 @@ methodmap ZSFastZombie < CClotBody
 	
 	public ZSFastZombie(float vecPos[3], float vecAng[3], int ally)
 	{
-		ZSFastZombie npc = view_as<ZSFastZombie>(CClotBody(vecPos, vecAng, "models/zombie_riot/gmod_zs/fast/fast.mdl", "1.15", "700", ally, false));
+		ZSFastZombie npc = view_as<ZSFastZombie>(CClotBody(vecPos, vecAng, "models/zombie_riot/gmod_zs/zs_zombie_models_1_1.mdl", "1.15", "700", ally, false));
 		
 		i_NpcWeight[npc.index] = 1;
 		
@@ -204,6 +204,10 @@ public void ZSFastZombie_ZSFastZombieThink(int iNPC)
 	{
 		return;
 	}
+	
+	SetEntProp(npc.index, Prop_Send, "m_nBody", GetEntProp(npc.index, Prop_Send, "m_nBody"));
+	SetVariantInt(4);
+	AcceptEntityInput(iNPC, "SetBodyGroup");
 	
 	npc.m_flNextDelayTime = GetGameTime(npc.index) + DEFAULT_UPDATE_DELAY_FLOAT;
 	

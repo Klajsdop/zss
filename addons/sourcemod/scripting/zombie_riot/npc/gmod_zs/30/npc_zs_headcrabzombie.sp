@@ -58,7 +58,7 @@ public void ZSHeadcrabZombie_OnMapStart_NPC()
 	for (int i = 0; i < (sizeof(g_MeleeMissSounds));   i++) { PrecacheSound(g_MeleeMissSounds[i]);   }
 
 	PrecacheSound("player/flow.wav");
-	PrecacheModel("models/zombie_riot/gmod_zs/classic/classic.mdl");
+	PrecacheModel("models/zombie/classic.mdl");
 	NPCData data;
 	strcopy(data.Name, sizeof(data.Name), "Headcrab Zombie");
 	strcopy(data.Plugin, sizeof(data.Plugin), "npc_zs_headcrabzombie");
@@ -289,6 +289,8 @@ public Action ZSHeadcrabZombie_Revert_Zombie_Resistance(Handle timer, int ref)
 	int zombie = EntRefToEntIndex(ref);
 	if(IsValidEntity(zombie))
 	{
+		ZSHeadcrabZombie npc = view_as<ZSHeadcrabZombie>(zombie);
+		npc.m_flSpeed = 260.0;
 		SetEntityRenderMode(zombie, RENDER_NORMAL);
 		SetEntityRenderColor(zombie, 255, 255, 255, 255);
 	}

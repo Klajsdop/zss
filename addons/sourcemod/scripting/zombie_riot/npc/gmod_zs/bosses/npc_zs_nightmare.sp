@@ -43,7 +43,7 @@ public void ZSNightmare_OnMapStart_NPC()
 	for (int i = 0; i < (sizeof(g_MeleeMissSounds));   i++) { PrecacheSound(g_MeleeMissSounds[i]);   }
 
 	PrecacheSound("player/flow.wav");
-	PrecacheModel("models/zombie_riot/gmod_zs/skeleton/skeleton.mdl");
+	PrecacheModel("models/zombie_riot/gmod_zs/zs_zombie_models_1_1.mdl");
 	NPCData data;
 	strcopy(data.Name, sizeof(data.Name), "Nightmare");
 	strcopy(data.Plugin, sizeof(data.Plugin), "npc_zs_nightmare");
@@ -94,7 +94,7 @@ methodmap ZSNightmare < CClotBody
 	
 	public ZSNightmare(float vecPos[3], float vecAng[3], int ally)
 	{
-		ZSNightmare npc = view_as<ZSNightmare>(CClotBody(vecPos, vecAng, "models/zombie_riot/gmod_zs/skeleton/skeleton.mdl", "1.15", "15000", ally, false));
+		ZSNightmare npc = view_as<ZSNightmare>(CClotBody(vecPos, vecAng, "models/zombie_riot/gmod_zs/zs_zombie_models_1_1.mdl", "1.15", "15000", ally, false));
 		
 		i_NpcWeight[npc.index] = 1;
 		
@@ -109,7 +109,7 @@ methodmap ZSNightmare < CClotBody
 		npc.m_iStepNoiseType = STEPSOUND_NORMAL;	
 		npc.m_iNpcStepVariation = STEPTYPE_NORMAL;
 		
-		SetEntityRenderColor(npc.index, 0, 0, 0, 255);
+		//SetEntityRenderColor(npc.index, 0, 0, 0, 255);
 		npc.m_flSpeed = 350.0;
 		func_NPCDeath[npc.index] = ZSNightmare_NPCDeath;
 		func_NPCThink[npc.index] = ZSNightmare_ClotThink;
@@ -153,6 +153,10 @@ public void ZSNightmare_ClotThink(int iNPC)
 	{
 		return;
 	}
+	
+	SetEntProp(npc.index, Prop_Send, "m_nBody", GetEntProp(npc.index, Prop_Send, "m_nBody"));
+	SetVariantInt(32768);
+	AcceptEntityInput(iNPC, "SetBodyGroup");
 	
 	npc.m_flNextDelayTime = GetGameTime(npc.index) + DEFAULT_UPDATE_DELAY_FLOAT;
 	

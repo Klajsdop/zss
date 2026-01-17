@@ -16,7 +16,6 @@ enum				// Types
 	Element_ManaOverflow,		// 10
 	Elemental_Pheromone, // 11
 
-	
 	Element_MAX
 }
 
@@ -1179,7 +1178,6 @@ void Matrix_Shared_CorruptionPrecache()
 	for (int i = 0; i < sizeof(g_Agent_Summons); i++)
 		NPC_GetByPlugin(g_Agent_Summons[i]);
 }
-
 void Elemental_AddPheromoneDamage(int victim, int attacker, int damagebase, bool sound = true, bool ignoreArmor = false)
 {
 	if(i_IsVehicle[victim])
@@ -1222,7 +1220,7 @@ void Elemental_AddPheromoneDamage(int victim, int attacker, int damagebase, bool
 					spawnRing_Vectors(MatrixLoc, 1.0, 0.0, 0.0, 10.0, "materials/sprites/laserbeam.vmt", 54, 77, 43, 255, 1, 1.0, 5.0, 8.0, 1, 125.0 * 2.0);
 					EmitSoundToAll("ambient/energy/weld1.wav", victim, SNDCHAN_STATIC, RAIDBOSS_ZOMBIE_SOUNDLEVEL, _, BOSS_ZOMBIE_VOLUME);
 					f_ArmorCurrosionImmunity[victim][Elemental_Pheromone] = GetGameTime() + 5.0;
-					Force_ExplainBuffToClient(victim, "Corruption Elemental Damage");
+					Force_ExplainBuffToClient(victim, "Pheromone Elemental Damage");
 				}
 			}
 			
@@ -1377,7 +1375,6 @@ void Zombie_Shared_PheromonePrecache()
 	for (int i = 0; i < sizeof(g_Zombie_Summons); i++)
 		NPC_GetByPlugin(g_Zombie_Summons[i]);
 }
-
 void Elemental_AddBurgerDamage(int victim, int attacker, int damagebase)
 {
 	if(i_IsVehicle[victim])

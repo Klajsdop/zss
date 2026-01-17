@@ -42,7 +42,7 @@ public void BloatedZombie_OnMapStart_NPC()
 	for (int i = 0; i < (sizeof(g_MeleeMissSounds));   i++) { PrecacheSound(g_MeleeMissSounds[i]);   }
 
 	PrecacheSound("player/flow.wav");
-	PrecacheModel("models/zombie_riot/gmod_zs/fatty/fatty.mdl");
+	PrecacheModel("models/zombie_riot/gmod_zs/zs_zombie_models_1_1.mdl");
 	NPCData data;
 	strcopy(data.Name, sizeof(data.Name), "Bloated Zombie");
 	strcopy(data.Plugin, sizeof(data.Plugin), "npc_zs_bloated_zombie");
@@ -96,7 +96,7 @@ methodmap BloatedZombie < CClotBody
 	
 	public BloatedZombie(float vecPos[3], float vecAng[3], int ally)
 	{
-		BloatedZombie npc = view_as<BloatedZombie>(CClotBody(vecPos, vecAng, "models/zombie_riot/gmod_zs/fatty/fatty.mdl", "1.25", "325", ally, false));
+		BloatedZombie npc = view_as<BloatedZombie>(CClotBody(vecPos, vecAng, "models/zombie_riot/gmod_zs/zs_zombie_models_1_1.mdl", "1.25", "325", ally, false));
 		
 		i_NpcWeight[npc.index] = 1;
 		
@@ -126,6 +126,11 @@ methodmap BloatedZombie < CClotBody
 public void BloatedZombie_ClotThink(int iNPC)
 {
 	BloatedZombie npc = view_as<BloatedZombie>(iNPC);
+	
+	SetEntProp(npc.index, Prop_Send, "m_nBody", GetEntProp(npc.index, Prop_Send, "m_nBody"));
+	SetVariantInt(128);
+	AcceptEntityInput(iNPC, "SetBodyGroup");
+	
 	
 	if(npc.m_flNextDelayTime > GetGameTime(npc.index))
 	{

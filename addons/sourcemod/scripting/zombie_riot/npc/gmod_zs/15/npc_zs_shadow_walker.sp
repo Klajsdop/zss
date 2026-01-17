@@ -43,7 +43,7 @@ public void ShadowWalker_OnMapStart_NPC()
 	for (int i = 0; i < (sizeof(g_MeleeMissSounds));   i++) { PrecacheSound(g_MeleeMissSounds[i]);   }
 
 	PrecacheSound("player/flow.wav");
-	PrecacheModel("models/zombie_riot/gmod_zs/corpse1.mdl");
+	PrecacheModel("models/zombie_riot/gmod_zs/zs_zombie_models_1_1.mdl");
 	NPCData data;
 	strcopy(data.Name, sizeof(data.Name), "Shadow Walker");
 	strcopy(data.Plugin, sizeof(data.Plugin), "npc_zs_shadow_walker");
@@ -97,7 +97,7 @@ methodmap ShadowWalker < CClotBody
 	
 	public ShadowWalker(float vecPos[3], float vecAng[3], int ally)
 	{
-		ShadowWalker npc = view_as<ShadowWalker>(CClotBody(vecPos, vecAng, "models/zombie_riot/gmod_zs/corpse1.mdl", "1.15", "800", ally, false));
+		ShadowWalker npc = view_as<ShadowWalker>(CClotBody(vecPos, vecAng, "models/zombie_riot/gmod_zs/zs_zombie_models_1_1.mdl", "1.15", "800", ally, false));
 		
 		i_NpcWeight[npc.index] = 1;
 		
@@ -124,10 +124,9 @@ methodmap ShadowWalker < CClotBody
 		SetEntityRenderMode(npc.index, RENDER_TRANSCOLOR);
 		SetEntityRenderColor(npc.index, 51, 51, 51, 115);
 
-		npc.m_iWearable1 = npc.EquipItem("weapon_bone", "models/zombie_riot/gmod_zs/skeleton/skeleton.mdl");
+		npc.m_iWearable1 = npc.EquipItem("weapon_bone", "models/zombie_riot/gmod_zs/zs_zombie_models_1_1.mdl");
 		SetVariantString("1.0");
 		AcceptEntityInput(npc.m_iWearable1, "SetModelScale");
-
 		SetEntityRenderMode(npc.m_iWearable1, RENDER_TRANSCOLOR);
 		SetEntityRenderColor(npc.m_iWearable1, 0, 0, 0, 255);
 
@@ -145,6 +144,11 @@ public void ShadowWalker_ClotThink(int iNPC)
 	{
 		return;
 	}
+	
+	SetEntProp(npc.index, Prop_Send, "m_nBody", GetEntProp(npc.index, Prop_Send, "m_nBody"));
+	SetVariantInt(16);
+	AcceptEntityInput(iNPC, "SetBodyGroup");
+	SetEntProp(npc.m_iWearable1, Prop_Send, "m_nBody", 64);
 	
 	npc.m_flNextDelayTime = GetGameTime(npc.index) + DEFAULT_UPDATE_DELAY_FLOAT;
 	

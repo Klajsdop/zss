@@ -58,7 +58,7 @@ public void GoreBlaster_OnMapStart_NPC()
 	for (int i = 0; i < (sizeof(g_MeleeMissSounds));   i++) { PrecacheSound(g_MeleeMissSounds[i]);   }
 
 	PrecacheSound("player/flow.wav");
-	PrecacheModel("models/zombie_riot/gmod_zs/classic/classic.mdl");
+	PrecacheModel("models/zombie_riot/gmod_zs/zs_zombie_models_1_1.mdl");
 	NPCData data;
 	strcopy(data.Name, sizeof(data.Name), "Gore Blaster");
 	strcopy(data.Plugin, sizeof(data.Plugin), "npc_zs_gore_blaster");
@@ -109,7 +109,7 @@ methodmap GoreBlaster < CClotBody
 	
 	public GoreBlaster(float vecPos[3], float vecAng[3], int ally)
 	{
-		GoreBlaster npc = view_as<GoreBlaster>(CClotBody(vecPos, vecAng, "models/zombie_riot/gmod_zs/classic/classic.mdl", "1.15", "800", ally, false));
+		GoreBlaster npc = view_as<GoreBlaster>(CClotBody(vecPos, vecAng, "models/zombie_riot/gmod_zs/zs_zombie_models_1_1.mdl", "1.15", "800", ally, false));
 		
 		i_NpcWeight[npc.index] = 1;
 		
@@ -147,6 +147,10 @@ public void GoreBlaster_ClotThink(int iNPC)
 	{
 		return;
 	}
+	
+	SetEntProp(npc.index, Prop_Send, "m_nBody", GetEntProp(npc.index, Prop_Send, "m_nBody"));
+	SetVariantInt(1);
+	AcceptEntityInput(iNPC, "SetBodyGroup");
 	
 	npc.m_flNextDelayTime = GetGameTime(npc.index) + DEFAULT_UPDATE_DELAY_FLOAT;
 	

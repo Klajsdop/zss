@@ -132,7 +132,7 @@ methodmap ZSHuntsman < CClotBody
 		AcceptEntityInput(npc.m_iWearable1, "SetModelScale");
 
 		SetEntProp(npc.m_iWearable1, Prop_Send, "m_nSkin", skin);
-		SetEntProp(npc.m_iWearable2, Prop_Send, "m_nSkin", skin);
+		SetEntProp(npc.m_iWearable2, Prop_Send, "m_nSkin", 1);
 		
 		func_NPCDeath[npc.index] = ZSHuntsman_NPCDeath;
 		func_NPCOnTakeDamage[npc.index] = ZSHuntsman_OnTakeDamage;

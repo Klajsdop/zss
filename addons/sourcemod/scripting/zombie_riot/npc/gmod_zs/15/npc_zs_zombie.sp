@@ -58,7 +58,7 @@ public void ZSZombie_OnMapStart_NPC()
 	for (int i = 0; i < (sizeof(g_MeleeMissSounds));   i++) { PrecacheSound(g_MeleeMissSounds[i]);   }
 
 	PrecacheSound("player/flow.wav");
-	PrecacheModel("models/zombie_riot/gmod_zs/classic/classic.mdl");
+	PrecacheModel("models/zombie_riot/gmod_zs/zs_zombie_models_1_1.mdl");
 	NPCData data;
 	strcopy(data.Name, sizeof(data.Name), "ZS Zombie");
 	strcopy(data.Plugin, sizeof(data.Plugin), "npc_zs_zombie");
@@ -109,7 +109,7 @@ methodmap ZSZombie < CClotBody
 	
 	public ZSZombie(float vecPos[3], float vecAng[3], int ally)
 	{
-		ZSZombie npc = view_as<ZSZombie>(CClotBody(vecPos, vecAng, "models/zombie_riot/gmod_zs/classic/classic.mdl", "1.15", "800", ally, false));
+		ZSZombie npc = view_as<ZSZombie>(CClotBody(vecPos, vecAng, "models/zombie_riot/gmod_zs/zs_zombie_models_1_1.mdl", "1.15", "800", ally, false));
 		
 		i_NpcWeight[npc.index] = 1;
 		
@@ -139,6 +139,10 @@ methodmap ZSZombie < CClotBody
 public void ZSZombie_ClotThink(int iNPC)
 {
 	ZSZombie npc = view_as<ZSZombie>(iNPC);
+	
+	SetEntProp(npc.index, Prop_Send, "m_nBody", GetEntProp(npc.index, Prop_Send, "m_nBody"));
+	SetVariantInt(1);
+	AcceptEntityInput(iNPC, "SetBodyGroup");
 	
 	if(npc.m_flNextDelayTime > GetGameTime(npc.index))
 	{
@@ -287,6 +291,8 @@ public Action ZSZombie_Revert_Zombie_Resistance(Handle timer, int ref)
 	int zombie = EntRefToEntIndex(ref);
 	if(IsValidEntity(zombie))
 	{
+		ZSZombie npc = view_as<ZSZombie>(zombie);
+		npc.m_flSpeed = 260.0;
 		SetEntityRenderMode(zombie, RENDER_NORMAL);
 		SetEntityRenderColor(zombie, 255, 255, 255, 255);
 	}

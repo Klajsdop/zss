@@ -42,7 +42,7 @@ public void VileBloatedZombie_OnMapStart_NPC()
 	for (int i = 0; i < (sizeof(g_MeleeMissSounds));   i++) { PrecacheSound(g_MeleeMissSounds[i]);   }
 
 	PrecacheSound("player/flow.wav");
-	PrecacheModel("models/zombie_riot/gmod_zs/vile_bloated/vile_bloated.mdl");
+	PrecacheModel("models/zombie_riot/gmod_zs/zs_zombie_models_1_1.mdl");
 	NPCData data;
 	strcopy(data.Name, sizeof(data.Name), "Vile Bloated Zombie");
 	strcopy(data.Plugin, sizeof(data.Plugin), "npc_zs_vile_bloated_zombie");
@@ -96,7 +96,7 @@ methodmap VileBloatedZombie < CClotBody
 	
 	public VileBloatedZombie(float vecPos[3], float vecAng[3], int ally)
 	{
-		VileBloatedZombie npc = view_as<VileBloatedZombie>(CClotBody(vecPos, vecAng, "models/zombie_riot/gmod_zs/vile_bloated/vile_bloated.mdl", "1.25", "650", ally, false));
+		VileBloatedZombie npc = view_as<VileBloatedZombie>(CClotBody(vecPos, vecAng, "models/zombie_riot/gmod_zs/zs_zombie_models_1_1.mdl", "1.25", "650", ally, false));
 		
 		i_NpcWeight[npc.index] = 1;
 		
@@ -116,6 +116,9 @@ methodmap VileBloatedZombie < CClotBody
 		func_NPCDeath[npc.index] = VileBloatedZombie_NPCDeath;
 		func_NPCThink[npc.index] = VileBloatedZombie_ClotThink;
 		func_NPCOnTakeDamage[npc.index] = Generic_OnTakeDamage;
+		
+		SetEntityRenderMode(npc.index, RENDER_TRANSCOLOR);
+		SetEntityRenderColor(npc.index, 150, 255, 150, 255);
 
 		npc.StartPathing();
 		
@@ -126,6 +129,10 @@ methodmap VileBloatedZombie < CClotBody
 public void VileBloatedZombie_ClotThink(int iNPC)
 {
 	VileBloatedZombie npc = view_as<VileBloatedZombie>(iNPC);
+	
+	SetEntProp(npc.index, Prop_Send, "m_nBody", GetEntProp(npc.index, Prop_Send, "m_nBody"));
+	SetVariantInt(128);
+	AcceptEntityInput(iNPC, "SetBodyGroup");
 	
 	if(npc.m_flNextDelayTime > GetGameTime(npc.index))
 	{
