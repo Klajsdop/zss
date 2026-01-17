@@ -70,7 +70,7 @@ void ZsUnspeakable_OnMapStart_NPC()
 	NPCData data;
 	strcopy(data.Name, sizeof(data.Name), "Unspeakable");
 	strcopy(data.Plugin, sizeof(data.Plugin), "npc_zs_unspeakable");
-	strcopy(data.Icon, sizeof(data.Icon), "raid_unspeakable");
+	strcopy(data.Icon, sizeof(data.Icon), "gmod_zs_unspeakable");
 	data.IconCustom = true;
 	data.Flags = MVM_CLASS_FLAG_MINIBOSS|MVM_CLASS_FLAG_ALWAYSCRIT;
 	data.Category = Type_Raid;

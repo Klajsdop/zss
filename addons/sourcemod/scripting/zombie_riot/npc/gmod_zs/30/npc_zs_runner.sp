@@ -40,6 +40,8 @@ static const char g_MeleeAttackSounds[][] =
 
 void Zsrunner_Precache()
 {
+	PrecacheSound("player/flow.wav");
+	PrecacheModel("models/zombie_riot/gmod_zs/zs_zombie_models_1_1.mdl");
 	NPCData data;
 	strcopy(data.Name, sizeof(data.Name), "Zombie Runner");
 	strcopy(data.Plugin, sizeof(data.Plugin), "npc_zs_runner");
@@ -85,19 +87,16 @@ methodmap Zsrunner < CSeaBody
 	
 	public Zsrunner(float vecPos[3], float vecAng[3], int ally, const char[] data)
 	{
-		Zsrunner npc = view_as<Zsrunner>(CClotBody(vecPos, vecAng, "models/zombie/classic.mdl", "1.15", "800", ally, false));
+		Zsrunner npc = view_as<Zsrunner>(CClotBody(vecPos, vecAng, "models/zombie_riot/gmod_zs/zs_zombie_models_1_1.mdl", "1.15", "800", ally, false));
 		// 2800 x 0.15
 		// 3600 x 0.15
 
-		if(data[0])
-		{
-			SetVariantInt(1);
-			AcceptEntityInput(npc.index, "SetBodyGroup");
-		}
+		SetVariantInt(1);
+		AcceptEntityInput(npc.index, "SetBodyGroup");
 		
 		npc.SetElite(view_as<bool>(data[0]));
 		i_NpcWeight[npc.index] = 1;
-		npc.SetActivity("ACT_WALK_ON_FIRE");
+		npc.SetActivity("ACT_HL2MP_RUN_ZOMBIE");
 		KillFeed_SetKillIcon(npc.index, "warrior_spirit");
 		
 		npc.m_iBleedType = BLEEDTYPE_NORMAL;
@@ -130,7 +129,7 @@ public void Zsrunner_ClotThink(int iNPC)
 
 	if(npc.m_blPlayHurtAnimation)
 	{
-		npc.AddGesture("ACT_GESTURE_FLINCH_HEAD", false);
+		npc.AddGesture("ACT_FLINCH", false);
 		npc.PlayHurtSound();
 		npc.m_blPlayHurtAnimation = false;
 	}
@@ -205,7 +204,7 @@ public void Zsrunner_ClotThink(int iNPC)
 			{
 				npc.m_iTarget = target;
 
-				npc.AddGesture("ACT_MELEE_ATTACK1");
+				npc.AddGesture("ACT_GMOD_GESTURE_RANGE_ZOMBIE");
 
 				npc.PlayMeleeSound();
 				

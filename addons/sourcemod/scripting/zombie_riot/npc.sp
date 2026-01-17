@@ -1197,6 +1197,7 @@ void NPC_ConfigSetup()
 	Pregnant_Precache();
 	ZSHeadcrabZombie_OnMapStart_NPC();
 	ZSFastheadcrabZombie_OnMapStart_NPC();
+	ZSPoisonheadcrabZombie_OnMapStart_NPC();
 	ZsSpitter_Precache();
 	Zsrunner_Precache();
 	ZSsoldierOnMapStart();
@@ -2627,6 +2628,7 @@ Action NpcSpecificOnTakeDamage(int victim, int &attacker, int &inflictor, float 
 #include "npc/gmod_zs/30/npc_zs_butcher.sp"
 #include "npc/gmod_zs/30/npc_zs_headcrabzombie.sp"
 #include "npc/gmod_zs/30/npc_zs_fastheadcrab_zombie.sp"
+#include "npc/gmod_zs/30/npc_zs_poisonheadcrab_zombie.sp"
 #include "npc/gmod_zs/30/npc_zs_runner.sp"
 #include "npc/gmod_zs/30/npc_zs_spitter.sp"
 #include "npc/gmod_zs/45/npc_zs_zombie_scout.sp"

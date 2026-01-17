@@ -66,7 +66,7 @@ public void ZSHowler_OnMapStart_NPC()
 	NPCData data;
 	strcopy(data.Name, sizeof(data.Name), "ZS Howler");
 	strcopy(data.Plugin, sizeof(data.Plugin), "npc_zs_howler");
-	strcopy(data.Icon, sizeof(data.Icon), "norm_headcrab_zombie");
+	strcopy(data.Icon, sizeof(data.Icon), "gmod_zs_howler");
 	data.IconCustom = true;
 	data.Flags = 0;
 	data.Category = Type_GmodZS;

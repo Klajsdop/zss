@@ -36,12 +36,12 @@ void Butcher_OnMapStart_NPC()
 	for (int i = 0; i < (sizeof(g_MeleeAttackSounds)); i++) { PrecacheSound(g_MeleeAttackSounds[i]); }
 	for (int i = 0; i < (sizeof(g_MeleeHitSounds)); i++) { PrecacheSound(g_MeleeHitSounds[i]); }
 	PrecacheSound("player/flow.wav");
-	PrecacheModel("models/player/scout.mdl");
+	PrecacheModel("models/zombie_riot/gmod_zs/zs_zombie_models_1_1.mdl");
 	NPCData data;
 	strcopy(data.Name, sizeof(data.Name), "The Butcher");
 	strcopy(data.Plugin, sizeof(data.Plugin), "npc_zs_butcher");
-	strcopy(data.Icon, sizeof(data.Icon), "scout_bat");
-	data.IconCustom = false;
+	strcopy(data.Icon, sizeof(data.Icon), "gmod_zs_butcher");
+	data.IconCustom = true;
 	data.Flags = 0;
 	data.Category = Type_GmodZS;
 	data.Func = ClotSummon;
@@ -60,7 +60,7 @@ methodmap Butcher < CClotBody
 		if(this.m_flNextIdleSound > GetGameTime(this.index))
 			return;
 		
-		EmitSoundToAll(g_IdleAlertedSounds[GetRandomInt(0, sizeof(g_IdleAlertedSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME);
+		EmitSoundToAll(g_IdleAlertedSounds[GetRandomInt(0, sizeof(g_IdleAlertedSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, GetRandomInt(70, 80));
 		this.m_flNextIdleSound = GetGameTime(this.index) + GetRandomFloat(12.0, 24.0);
 		
 	}
@@ -72,13 +72,13 @@ methodmap Butcher < CClotBody
 			
 		this.m_flNextHurtSound = GetGameTime(this.index) + 0.4;
 		
-		EmitSoundToAll(g_HurtSounds[GetRandomInt(0, sizeof(g_HurtSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME);
+		EmitSoundToAll(g_HurtSounds[GetRandomInt(0, sizeof(g_HurtSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, GetRandomInt(137, 143));
 		
 	}
 	
 	public void PlayDeathSound() 
 	{
-		EmitSoundToAll(g_DeathSounds[GetRandomInt(0, sizeof(g_DeathSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME);
+		EmitSoundToAll(g_DeathSounds[GetRandomInt(0, sizeof(g_DeathSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, GetRandomInt(122, 128));
 	}
 	
 	public void PlayMeleeSound()
@@ -94,12 +94,12 @@ methodmap Butcher < CClotBody
 	
 	public Butcher(float vecPos[3], float vecAng[3], int ally)
 	{
-		Butcher npc = view_as<Butcher>(CClotBody(vecPos, vecAng, "models/player/scout.mdl", "1.0", "15000", ally));
+		Butcher npc = view_as<Butcher>(CClotBody(vecPos, vecAng, "models/zombie_riot/gmod_zs/zs_zombie_models_1_1.mdl", "1.15", "15000", ally));
 		
 		i_NpcWeight[npc.index] = 1;
 		FormatEx(c_HeadPlaceAttachmentGibName[npc.index], sizeof(c_HeadPlaceAttachmentGibName[]), "head");
 		
-		int iActivity = npc.LookupActivity("ACT_MP_RUN_MELEE_ALLCLASS");
+		int iActivity = npc.LookupActivity("ACT_HL2MP_RUN_ZOMBIE");
 		if(iActivity > 0) npc.StartActivity(iActivity);
 		
 		npc.m_flNextMeleeAttack = 0.0;
@@ -123,16 +123,10 @@ methodmap Butcher < CClotBody
 		int skin = 1;
 		SetEntProp(npc.index, Prop_Send, "m_nSkin", skin);
 
-		npc.m_iWearable1 = npc.EquipItem("R_Hand", "models/weapons/c_models/c_sd_cleaver/v_sd_cleaver.mdl");
-		SetVariantString("1.0");
-		AcceptEntityInput(npc.m_iWearable1, "SetModelScale");
-		
-		npc.m_iWearable2 = npc.EquipItem("R_Hand", "models/workshop/player/items/all_class/hwn2021_goalkeeper/hwn2021_goalkeeper_scout.mdl");
+		npc.m_iWearable1 = npc.EquipItem("weapon_bone", "models/weapons/c_models/c_sd_cleaver/v_sd_cleaver.mdl");
 		SetVariantString("1.0");
 		AcceptEntityInput(npc.m_iWearable1, "SetModelScale");
 
-		SetVariantInt(3);
-		AcceptEntityInput(npc.index, "SetBodyGroup");
 		SetEntProp(npc.m_iWearable1, Prop_Send, "m_nSkin", skin);
 		
 		return npc;
@@ -142,6 +136,11 @@ methodmap Butcher < CClotBody
 public void Butcher_ClotThink(int iNPC)
 {
 	Butcher npc = view_as<Butcher>(iNPC);
+
+	SetEntProp(npc.index, Prop_Send, "m_nBody", GetEntProp(npc.index, Prop_Send, "m_nBody"));
+	SetVariantInt(16);
+	AcceptEntityInput(iNPC, "SetBodyGroup");
+
 	if(npc.m_flNextDelayTime > GetGameTime(npc.index))
 	{
 		return;
@@ -151,7 +150,7 @@ public void Butcher_ClotThink(int iNPC)
 
 	if(npc.m_blPlayHurtAnimation)
 	{
-		npc.AddGesture("ACT_MP_GESTURE_FLINCH_CHEST", false);
+		npc.AddGesture("ACT_FLINCH", false);
 		npc.m_blPlayHurtAnimation = false;
 		npc.PlayHurtSound();
 	}
@@ -313,7 +312,7 @@ void ButcherSelfDefense(Butcher npc, float gameTime, int target, float distance)
 			{
 				npc.m_iTarget = Enemy_I_See;
 				npc.PlayMeleeSound();
-				npc.AddGesture("ACT_MP_ATTACK_STAND_MELEE_ALLCLASS");
+				npc.AddGesture("ACT_HL2MP_GESTURE_RANGE_ATTACK_MELEE");
 						
 				npc.m_flAttackHappens = gameTime + 0.25;
 				npc.m_flDoingAnimation = gameTime + 0.25;

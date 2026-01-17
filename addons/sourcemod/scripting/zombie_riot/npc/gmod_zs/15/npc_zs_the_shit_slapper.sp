@@ -73,8 +73,8 @@ public void ZSThe_Shit_Slapper_OnMapStart_NPC()
 	strcopy(data.Plugin, sizeof(data.Plugin), "npc_zs_the_shit_slapper");	//THE GREAT AND POWERFUL SHIT SLAPPER, I have zero clue on what kind of cocain I was back then, but I sure as hell want ti tight now
 	data.Category = Type_GmodZS;
 	data.Func = ClotSummon;
-	strcopy(data.Icon, sizeof(data.Icon), "norm_headcrab_zombie"); 		//leaderboard_class_(insert the name)
-	data.IconCustom = false;													//download needed?
+	strcopy(data.Icon, sizeof(data.Icon), "gmod_zs_shit_slapper"); 		//leaderboard_class_(insert the name)
+	data.IconCustom = true;													//download needed?
 	data.Flags = MVM_CLASS_FLAG_MINIBOSS|MVM_CLASS_FLAG_ALWAYSCRIT;																//example: MVM_CLASS_FLAG_MINIBOSS|MVM_CLASS_FLAG_ALWAYSCRIT;, forces these flags.	
 	NPC_Add(data);
 

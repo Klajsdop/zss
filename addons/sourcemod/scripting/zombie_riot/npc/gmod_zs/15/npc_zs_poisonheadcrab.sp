@@ -41,7 +41,7 @@ void ZSPoisonHeadcrab_MapStart()
 	NPCData data;
 	strcopy(data.Name, sizeof(data.Name), "Poison Headcrab");
 	strcopy(data.Plugin, sizeof(data.Plugin), "npc_zs_poisonheadcrab");
-	strcopy(data.Icon, sizeof(data.Icon), "");
+	strcopy(data.Icon, sizeof(data.Icon), "gmod_zs_poison_headcrab");
 	data.IconCustom = true;
 	data.Flags = 0;
 	data.Category = Type_GmodZS;

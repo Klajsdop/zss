@@ -58,11 +58,11 @@ public void ZSHeadcrabZombie_OnMapStart_NPC()
 	for (int i = 0; i < (sizeof(g_MeleeMissSounds));   i++) { PrecacheSound(g_MeleeMissSounds[i]);   }
 
 	PrecacheSound("player/flow.wav");
-	PrecacheModel("models/zombie/classic.mdl");
+	PrecacheModel("models/zombie_riot/gmod_zs/zs_zombie_models_1_1.mdl");
 	NPCData data;
 	strcopy(data.Name, sizeof(data.Name), "Headcrab Zombie");
 	strcopy(data.Plugin, sizeof(data.Plugin), "npc_zs_headcrabzombie");
-	strcopy(data.Icon, sizeof(data.Icon), "norm_headcrab_zombie");
+	strcopy(data.Icon, sizeof(data.Icon), "norm_headcrab_zombie_forti");
 	data.IconCustom = true;
 	data.Flags = 0;
 	data.Category = Type_GmodZS;
@@ -109,13 +109,13 @@ methodmap ZSHeadcrabZombie < CClotBody
 	
 	public ZSHeadcrabZombie(float vecPos[3], float vecAng[3], int ally)
 	{
-		ZSHeadcrabZombie npc = view_as<ZSHeadcrabZombie>(CClotBody(vecPos, vecAng, "models/zombie/classic.mdl", "1.15", "3200", ally, false));
+		ZSHeadcrabZombie npc = view_as<ZSHeadcrabZombie>(CClotBody(vecPos, vecAng, "models/zombie_riot/gmod_zs/zs_zombie_models_1_1.mdl", "1.15", "3200", ally, false));
 		
 		i_NpcWeight[npc.index] = 1;
 		
 		FormatEx(c_HeadPlaceAttachmentGibName[npc.index], sizeof(c_HeadPlaceAttachmentGibName[]), "head");
 		
-		int iActivity = npc.LookupActivity("ACT_WALK");
+		int iActivity = npc.LookupActivity("ACT_HL2MP_WALK_ZOMBIE_01");
 		if(iActivity > 0) npc.StartActivity(iActivity);
 		
 		npc.m_flNextMeleeAttack = 0.0;
@@ -129,6 +129,10 @@ methodmap ZSHeadcrabZombie < CClotBody
 		func_NPCThink[npc.index] = ZSHeadcrabZombie_ClotThink;
 		func_NPCOnTakeDamage[npc.index] = ZSHeadcrabZombie_OnTakeDamage;
 
+		npc.m_iWearable1 = npc.EquipItem("weapon_bone", "models/zombie_riot/gmod_zs/zs_zombie_models_1_1.mdl");
+		SetVariantString("1.0");
+		AcceptEntityInput(npc.m_iWearable1, "SetModelScale");
+
 		npc.StartPathing();
 		
 		return npc;
@@ -138,9 +142,11 @@ methodmap ZSHeadcrabZombie < CClotBody
 public void ZSHeadcrabZombie_ClotThink(int iNPC)
 {
 	ZSHeadcrabZombie npc = view_as<ZSHeadcrabZombie>(iNPC);
-	
+
+	SetEntProp(npc.index, Prop_Send, "m_nBody", GetEntProp(npc.index, Prop_Send, "m_nBody"));
 	SetVariantInt(1);
 	AcceptEntityInput(iNPC, "SetBodyGroup");
+	SetEntProp(npc.m_iWearable1, Prop_Send, "m_nBody", 2);
 	
 	if(npc.m_flNextDelayTime > GetGameTime(npc.index))
 	{
@@ -155,7 +161,7 @@ public void ZSHeadcrabZombie_ClotThink(int iNPC)
 	{
 		npc.m_blPlayHurtAnimation = false;
 		if(!npc.m_flAttackHappenswillhappen)
-			npc.AddGesture("ACT_GESTURE_FLINCH_HEAD", false);
+			npc.AddGesture("ACT_FLINCH", false);
 		npc.PlayHurtSound();
 		
 	}
@@ -201,7 +207,7 @@ public void ZSHeadcrabZombie_ClotThink(int iNPC)
 			{
 				if (!npc.m_flAttackHappenswillhappen)
 				{
-					npc.AddGesture("ACT_MELEE_ATTACK1");
+					npc.AddGesture("ACT_GMOD_GESTURE_RANGE_ZOMBIE");
 					npc.PlayMeleeSound();
 					npc.m_flAttackHappens = GetGameTime(npc.index)+0.7;
 					npc.m_flAttackHappens_bullshit = GetGameTime(npc.index)+0.83;
@@ -336,4 +342,6 @@ public void ZSHeadcrabZombie_NPCDeath(int entity)
 			}
 		}
 	}
+	if(IsValidEntity(npc.m_iWearable1))
+		RemoveEntity(npc.m_iWearable1);
 }

@@ -58,7 +58,7 @@ public void Eradicator_OnMapStart_NPC()
 	NPCData data;
 	strcopy(data.Name, sizeof(data.Name), "ZS Eradicator");
 	strcopy(data.Plugin, sizeof(data.Plugin), "npc_zs_eradicator");
-	strcopy(data.Icon, sizeof(data.Icon), "norm_headcrab_zombie");
+	strcopy(data.Icon, sizeof(data.Icon), "gmod_zs_eradicator");
 	data.IconCustom = true;
 	data.Flags = 0;
 	data.Category = Type_GmodZS;

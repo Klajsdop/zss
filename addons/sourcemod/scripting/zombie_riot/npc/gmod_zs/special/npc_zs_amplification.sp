@@ -46,7 +46,7 @@ void Amplification_Precache()
 	NPCData data;
 	strcopy(data.Name, sizeof(data.Name), "Plaguebearer");
 	strcopy(data.Plugin, sizeof(data.Plugin), "npc_zs_amplification");
-	strcopy(data.Icon, sizeof(data.Icon), "");
+	strcopy(data.Icon, sizeof(data.Icon), "gmod_zs_plaguebearer");
 	data.IconCustom = true;
 	data.Flags = MVM_CLASS_FLAG_NORMAL|MVM_CLASS_FLAG_MINIBOSS;
 	data.Category = Type_GmodZS;

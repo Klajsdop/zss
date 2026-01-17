@@ -34,7 +34,7 @@ void ZsSpitter_Precache()
 	PrecacheModel("models/zombie_riot/gmod_zs/zs_zombie_models_1_1.mdl");
 	strcopy(data.Name, sizeof(data.Name), "ZS Spitter");
 	strcopy(data.Plugin, sizeof(data.Plugin), "npc_zs_spitter");
-	strcopy(data.Icon, sizeof(data.Icon), "");
+	strcopy(data.Icon, sizeof(data.Icon), "gmod_zs_spitter");
 	data.IconCustom = true;
 	data.Flags = 0;
 	data.Category = Type_GmodZS;
@@ -96,7 +96,7 @@ methodmap ZsSpitter < CSeaBody
 		
 		npc.SetElite(view_as<bool>(data[0]));
 		i_NpcWeight[npc.index] = 1;
-		int iActivity = npc.LookupActivity("ACT_HL2MP_WALK_ZOMBIE_01");
+		int iActivity = npc.LookupActivity("ACT_HL2MP_RUN_ZOMBIE");
 		if(iActivity > 0) npc.StartActivity(iActivity);
 		KillFeed_SetKillIcon(npc.index, "huntsman");
 		

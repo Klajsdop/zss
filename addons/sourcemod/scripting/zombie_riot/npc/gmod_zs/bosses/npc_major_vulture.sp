@@ -43,7 +43,7 @@ void Zsvulture_OnMapStart_NPC()
 	NPCData data;
 	strcopy(data.Name, sizeof(data.Name), "Major Vulture");
 	strcopy(data.Plugin, sizeof(data.Plugin), "npc_major_vulture");
-	strcopy(data.Icon, sizeof(data.Icon), "pyro_armored2_1");
+	strcopy(data.Icon, sizeof(data.Icon), "gmod_zs_major_vulture");
 	data.IconCustom = true;
 	data.Flags = 0;
 	data.Category = MVM_CLASS_FLAG_MINIBOSS|MVM_CLASS_FLAG_ALWAYSCRIT;

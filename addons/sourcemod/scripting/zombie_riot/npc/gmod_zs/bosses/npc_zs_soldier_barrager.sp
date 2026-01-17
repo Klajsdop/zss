@@ -62,10 +62,10 @@ void ZsSoldier_Barrager_OnMapStart_NPC()
 	NPCData data;
 	strcopy(data.Name, sizeof(data.Name), "Colonel Barrage");
 	strcopy(data.Plugin, sizeof(data.Plugin), "npc_zs_soldier_barrager");
+	strcopy(data.Icon, sizeof(data.Icon), "gmod_zs_colonel");
 	data.Category = MVM_CLASS_FLAG_MINIBOSS|MVM_CLASS_FLAG_ALWAYSCRIT;
 	data.Func = ClotSummon;
-	strcopy(data.Icon, sizeof(data.Icon), "soldier_burstfire"); 		//leaderboard_class_(insert the name)
-	data.IconCustom = false;													//download needed?
+	data.IconCustom = true;													//download needed?
 	data.Flags = 0;																//example: MVM_CLASS_FLAG_MINIBOSS|MVM_CLASS_FLAG_ALWAYSCRIT;, forces these flags.	
 	NPC_Add(data);
 

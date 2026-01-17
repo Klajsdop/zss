@@ -45,8 +45,8 @@ void ZSSphynx_OnMapStart_NPC()
 	NPCData data;
 	strcopy(data.Name, sizeof(data.Name), "Sphynx");
 	strcopy(data.Plugin, sizeof(data.Plugin), "npc_zs_sphynx");
-	strcopy(data.Icon, sizeof(data.Icon), "medic");
-	data.IconCustom = false;
+	strcopy(data.Icon, sizeof(data.Icon), "gmod_zs_sphynx");
+	data.IconCustom = true;
 	data.Flags = MVM_CLASS_FLAG_MINIBOSS|MVM_CLASS_FLAG_ALWAYSCRIT;
 	data.Category = Type_Mutation;
 	data.Func = ClotSummon;

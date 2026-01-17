@@ -58,7 +58,7 @@ public void ZSZmain_OnMapStart_NPC()
 	for (int i = 0; i < (sizeof(g_MeleeMissSounds));   i++) { PrecacheSound(g_MeleeMissSounds[i]);   }
 
 	PrecacheSound("player/flow.wav");
-	PrecacheModel("models/zombie_riot/gmod_zs/classic/classic.mdl");
+	PrecacheModel("models/zombie_riot/gmod_zs/zs_zombie_models_1_1.mdl");
 	NPCData data;
 	strcopy(data.Name, sizeof(data.Name), "Z-Main");
 	strcopy(data.Plugin, sizeof(data.Plugin), "npc_zs_zmain");
@@ -120,7 +120,7 @@ methodmap ZSZmain < CClotBody
 	
 	public ZSZmain(float vecPos[3], float vecAng[3], int ally)
 	{
-		ZSZmain npc = view_as<ZSZmain>(CClotBody(vecPos, vecAng, "models/zombie_riot/gmod_zs/classic/classic.mdl", "1.15", "225", ally, false));
+		ZSZmain npc = view_as<ZSZmain>(CClotBody(vecPos, vecAng, "models/zombie_riot/gmod_zs/zs_zombie_models_1_1.mdl", "1.15", "225", ally, false));
 		
 		i_NpcWeight[npc.index] = 1;
 		
@@ -151,6 +151,9 @@ methodmap ZSZmain < CClotBody
 public void ZSZmain_ClotThink(int iNPC)
 {
 	ZSZmain npc = view_as<ZSZmain>(iNPC);
+
+	SetVariantInt(1);
+	AcceptEntityInput(iNPC, "SetBodyGroup");
 	
 	if(npc.m_flNextDelayTime > GetGameTime(npc.index))
 	{
@@ -347,7 +350,7 @@ void ZSZmain_SelfDefense(ZSZmain npc, float gameTime, int target, float distance
 			{
 				npc.m_iTarget = Enemy_I_See;
 				npc.PlayMeleeSound();
-				npc.AddGesture("ACT_MELEE_ATTACK1");
+				npc.AddGesture("ACT_GMOD_GESTURE_RANGE_ZOMBIE");
 						
 				npc.m_flAttackHappens = gameTime + 0.71;
 				npc.m_flDoingAnimation = gameTime + 0.71;

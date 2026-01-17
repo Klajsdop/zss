@@ -54,7 +54,7 @@ public void ZSPoisonheadcrabZombie_OnMapStart_NPC()
 	NPCData data;
 	strcopy(data.Name, sizeof(data.Name), "Poison Zombie");
 	strcopy(data.Plugin, sizeof(data.Plugin), "npc_zs_poisonheadcrab_zombie");
-	strcopy(data.Icon, sizeof(data.Icon), "norm_poison_zombie");
+	strcopy(data.Icon, sizeof(data.Icon), "norm_poison_zombie_forti");
 	data.IconCustom = true;
 	data.Flags = 0;
 	data.Category = Type_GmodZS;
@@ -320,8 +320,8 @@ public Action ZSPoisonheadcrabZombie_OnTakeDamage(int victim, int &attacker, int
 			npc.flXenoInfectedSpecialHurtTime = GetGameTime(npc.index) + 2.0;
 			SetEntityRenderMode(npc.index, RENDER_TRANSCOLOR);
 			SetEntityRenderColor(npc.index, 150, 255, 150, 65);
-			CreateTimer(2.0, ZSPoisonZombie_Revert_ZSPoisonheadcrabZombie_Resistance, EntIndexToEntRef(victim), TIMER_FLAG_NO_MAPCHANGE);
-			CreateTimer(10.0, ZSPoisonZombie_Revert_ZSPoisonheadcrabZombie_Resistance_Enable, EntIndexToEntRef(victim), TIMER_FLAG_NO_MAPCHANGE);
+			CreateTimer(2.0, ZSPoisonheadcrabZombie_Revert_Poison_Zombie_Resistance, EntIndexToEntRef(victim), TIMER_FLAG_NO_MAPCHANGE);
+			CreateTimer(10.0, ZSPoisonheadcrabZombie_Revert_Poison_Zombie_Resistance_Enable, EntIndexToEntRef(victim), TIMER_FLAG_NO_MAPCHANGE);
 		}
 		float TrueArmor = 1.0;
 		if(!NpcStats_IsEnemySilenced(victim))
