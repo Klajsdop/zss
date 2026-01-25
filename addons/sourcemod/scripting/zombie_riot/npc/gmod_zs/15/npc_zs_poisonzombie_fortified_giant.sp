@@ -53,7 +53,7 @@ public void ZSFortifiedGiantPoisonZombie_OnMapStart_NPC()
 	NPCData data;
 	strcopy(data.Name, sizeof(data.Name), "Fortified Giant Poison Zombie");
 	strcopy(data.Plugin, sizeof(data.Plugin), "npc_zs_poisonzombie_fortified_giant");
-	strcopy(data.Icon, sizeof(data.Icon), "norm_poison_zombie_forti");
+	strcopy(data.Icon, sizeof(data.Icon), "norm_poison_zombie");
 	data.IconCustom = true;
 	data.Flags = MVM_CLASS_FLAG_MINIBOSS;
 	data.Category = Type_GmodZS;
