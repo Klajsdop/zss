@@ -346,7 +346,7 @@ void AllyheavySelfDefense(Allyheavy npc)
 				ShootLaser(npc.m_iWearable1, "bullet_tracer01_red", origin, vecHit, false );
 				if(IsValidEnemy(npc.index, target))
 				{
-					float damageDealt = 14.0;
+					float damageDealt = 54.0;
 					if(ShouldNpcDealBonusDamage(target))
 						damageDealt *= 3.0;
 

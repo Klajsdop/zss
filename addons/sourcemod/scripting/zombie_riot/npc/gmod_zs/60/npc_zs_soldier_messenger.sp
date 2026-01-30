@@ -1,6 +1,8 @@
 #pragma semicolon 1
 #pragma newdecls required
 
+bool g_infected_messenger_died;
+float g_infected_messenger_die;
 static const char g_DeathSounds[][] =
 {
 	"vo/soldier_paincrticialdeath01.mp3",
@@ -47,7 +49,8 @@ static char g_SummonSounds[][] = {
 };
 
 void InfectedMessengerOnMapStart()
-{
+{	
+	
 	NPCData data;
 	strcopy(data.Name, sizeof(data.Name), "Infected Messenger Soldier");
 	strcopy(data.Plugin, sizeof(data.Plugin), "npc_zs_soldier_messenger");
@@ -59,13 +62,18 @@ void InfectedMessengerOnMapStart()
 	NPC_Add(data);
 }
 
-static any ClotSummon(int client, float vecPos[3], float vecAng[3], int ally, const char[] data)
+static any ClotSummon(int client, float vecPos[3], float vecAng[3], int ally)
 {
-	return InfectedMessenger(vecPos, vecAng, ally, data);
+	return InfectedMessenger(vecPos, vecAng, ally);
 }
 
 methodmap InfectedMessenger < CClotBody
 {
+	property int i_GunMode
+	{
+		public get()							{ return i_TimesSummoned[this.index]; }
+		public set(int TempValueForProperty) 	{ i_TimesSummoned[this.index] = TempValueForProperty; }
+	}
 	public void PlayIdleSound()
 	{
 		if(this.m_flNextIdleSound > GetGameTime(this.index))
@@ -124,7 +132,7 @@ methodmap InfectedMessenger < CClotBody
 		public set(int TempValueForProperty) 	{ i_OverlordComboAttack[this.index] = TempValueForProperty; }
 	}
 	
-	public InfectedMessenger(float vecPos[3], float vecAng[3], int ally, const char[] data)
+	public InfectedMessenger(float vecPos[3], float vecAng[3], int ally)
 	{
 		InfectedMessenger npc = view_as<InfectedMessenger>(CClotBody(vecPos, vecAng, "models/player/soldier.mdl", "1.0", "70000", ally));
 		
@@ -143,6 +151,7 @@ methodmap InfectedMessenger < CClotBody
 		func_NPCDeath[npc.index] = ClotDeath;
 		func_NPCOnTakeDamage[npc.index] = InfectedMessenger_OnTakeDamage;
 		func_NPCThink[npc.index] = ClotThink;
+		npc.i_GunMode = Waves_GetRoundScale();
 		
 		npc.m_flSpeed = 100.0;
 		npc.m_flGetClosestTargetTime = 0.0;
@@ -154,16 +163,12 @@ methodmap InfectedMessenger < CClotBody
 		npc.m_bAlliesSummoned = false;
 		npc.WhatWaves = 0;
 		npc.InWaves = 0;
-		if(StrContains(data, "lost_my_job_wave") != -1)
-		{
-			char buffers[3][64];
-			ExplodeString(data, ";", buffers, sizeof(buffers), sizeof(buffers[]));
-			ReplaceString(buffers[0], 64, "lost_my_job_wave", "");
-			npc.WhatWaves = StringToInt(buffers[0]);
-			npc.InWaves = Waves_GetRoundScale()+1+npc.WhatWaves;
-			AddNpcToAliveList(npc.index, 1);
-		}
-		else if(StrContains(data, "lost_my_job") != -1)
+		g_infected_messenger_died=false;
+		g_infected_messenger_die=0.0;
+		AddNpcToAliveList(npc.index, 1);
+		npc.m_bStaticNPC = true;
+		b_ThisNpcIsImmuneToNuke[npc.index] = true;
+		b_ThisEntityIgnoredByOtherNpcsAggro[npc.index] = true;
 		
 		TeleportDiversioToRandLocation(npc.index,_,1750.0, 1250.0);
 		
@@ -213,6 +218,8 @@ methodmap InfectedMessenger < CClotBody
 		AcceptEntityInput(npc.m_iWearable6, "SetModelScale");
 		
 		SetEntProp(npc.m_iWearable2, Prop_Send, "m_nSkin", 1);
+		SetEntProp(npc.m_iWearable3, Prop_Send, "m_nSkin", 1);
+		SetEntProp(npc.m_iWearable4, Prop_Send, "m_nSkin", 1);
 
 		return npc;
 	}
@@ -227,7 +234,6 @@ static void ClotThink(int iNPC)
     npc.m_flNextDelayTime = gameTime + DEFAULT_UPDATE_DELAY_FLOAT;
     npc.Update();
 
-    // 피격 시 반응은 유지 (도망 중에도 움찔거림)
     if(npc.m_blPlayHurtAnimation)
     {
         npc.AddGesture("ACT_MP_GESTURE_FLINCH_CHEST", false);
@@ -238,7 +244,6 @@ static void ClotThink(int iNPC)
     if(npc.m_flNextThinkTime > gameTime) return;
     npc.m_flNextThinkTime = gameTime + 0.1;
 
-    // 1. 타겟 탐색 (이제 이 타겟은 공격 대상이 아니라 '피해야 할 대상'입니다)
     int target = npc.m_iTarget;
     if(i_Target[npc.index] != -1 && !IsValidEnemy(npc.index, target))
         i_Target[npc.index] = -1;
@@ -249,35 +254,45 @@ static void ClotThink(int iNPC)
         npc.m_iTarget = target;
         npc.m_flGetClosestTargetTime = gameTime + 1.0;
     }
-
-    // 2. 속도 설정 (공격 로직과 동일하게 체력이 낮을수록 더 빨리 도망감)
+	
     int maxhealth = ReturnEntityMaxHealth(npc.index);
     int health = GetEntProp(npc.index, Prop_Data, "m_iHealth");
     int minhealth = maxhealth / (Rogue_Paradox_RedMoon() ? 8 : 4);
     if(health < minhealth) health = minhealth;
     float hpRatio = float(maxhealth) / float(health);
     if(!NpcStats_IsEnemySilenced(npc.index))
-        npc.m_flSpeed = 120.0 + (hpRatio * 100.0); // 도망 속도를 조금 더 상향
+        npc.m_flSpeed = 120.0 + (hpRatio * 100.0);
 
-    // 3. 도망 로직 (가장 중요한 변경점)
     if(target > 0)
     {
-        float vecTarget[3]; WorldSpaceCenter(target, vecTarget);
-        float vecSelf[3]; WorldSpaceCenter(npc.index, vecSelf);
+        float vecTarget[3];
+        WorldSpaceCenter(target, vecTarget);
+        float vecSelf[3]; 
+        WorldSpaceCenter(npc.index, vecSelf);
         
-        // 적 -> 나 방향의 벡터를 구함
-        float vecAway[3];
-        SubtractVectors(vecSelf, vecTarget, vecAway);
-        NormalizeVector(vecAway, vecAway);
-        
-        // 반대 방향으로 500유닛 떨어진 지점을 목표로 설정
-        float vecFleeGoal[3];
-        ScaleVector(vecAway, 500.0); 
-        AddVectors(vecSelf, vecAway, vecFleeGoal);
-        
-        // 목표 지점으로 이동 설정
-        npc.SetGoalVector(vecFleeGoal);
-        npc.StartPathing();
+        // 타겟과의 거리 계산
+        float distance = GetVectorDistance(vecSelf, vecTarget);
+
+        if(distance <= 1000.0)
+        {
+            // [도망] 거리가 1000.0 이하일 때: 적의 반대 방향으로 이동
+            float vecAway[3];
+            SubtractVectors(vecSelf, vecTarget, vecAway);
+            NormalizeVector(vecAway, vecAway);
+            
+            float vecFleeGoal[3];
+            ScaleVector(vecAway, 500.0);
+            AddVectors(vecSelf, vecAway, vecFleeGoal);
+            
+            npc.SetGoalVector(vecFleeGoal);
+            npc.StartPathing();
+        }
+        else
+        {
+            // [추적] 거리가 1000.0보다 멀 때: 타겟의 위치로 직접 이동
+            npc.SetGoalVector(vecTarget);
+            npc.StartPathing();
+        }
     }
     else
     {
@@ -287,26 +302,81 @@ static void ClotThink(int iNPC)
 	if(npc.m_iTargetAlly && !IsValidAlly(npc.index, npc.m_iTargetAlly))
 		npc.m_iTargetAlly = 0;
 	
-	if(!npc.m_iTargetAlly || npc.m_flGetClosestTargetTime < gameTime)
+	if(!g_infected_messenger_died && (npc.i_GunMode <= (Waves_GetRoundScale() - 2) || RaidbossIgnoreBuildingsLogic(1) || LastMann))
 	{
-		npc.m_iTargetAlly = GetClosestAlly(npc.index);
-		if(npc.m_iTargetAlly < 1)
+		CPrintToChatAll("{green}감염된 전령병{default}: 잘 있어라 멍청이들 난 간다");
+		LastHitRef[npc.index] = -1;
+		float VecSelfNpc[3]; WorldSpaceCenter(npc.index, VecSelfNpc);
+		ParticleEffectAt(VecSelfNpc, "teleported_blue", 0.5);
+		b_NpcForcepowerupspawn[npc.index] = 0;
+		i_RaidGrantExtra[npc.index] = 0;
+		b_DissapearOnDeath[npc.index] = true;
+		b_DoGibThisNpc[npc.index] = true;
+		b_NoKillFeed[npc.index] = true;
+		SmiteNpcToDeath(npc.index);
+		return;
+	}
+	if(g_infected_messenger_died)
+	{
+		npc.m_flNextThinkTime = 0.0;
+		npc.StopPathing();
+		
+		npc.m_bisWalking = false;
+		npc.SetActivity("ACT_MP_CROUCH_MELEE");
+		npc.m_bisWalking = false;
+		if(gameTime > g_infected_messenger_die)
 		{
-			if(!npc.InWaves || (npc.InWaves && npc.InWaves - (Waves_GetRoundScale()+1) <= 0))
-			{
-				LastHitRef[npc.index] = -1;
-				float VecSelfNpc[3]; WorldSpaceCenter(npc.index, VecSelfNpc);
-				ParticleEffectAt(VecSelfNpc, "teleported_blue", 0.5);
-				b_NpcForcepowerupspawn[npc.index] = 0;
-				i_RaidGrantExtra[npc.index] = 0;
-				b_DissapearOnDeath[npc.index] = true;
-				b_DoGibThisNpc[npc.index] = true;
-				b_NoKillFeed[npc.index] = true;
-				SmiteNpcToDeath(npc.index);
-				return;
-			}
+			Spawn_Chaos(npc);
+			RequestFrame(KillNpc, EntIndexToEntRef(npc.index));
+			npc.m_bDissapearOnDeath = true;
+			SpawnMoney(npc.index, true);
+			npc.PlayDeathSound();
 		}
-		npc.m_flGetClosestTargetTime = gameTime + 1.0;	
+		else if(gameTime + 3.0 > g_infected_messenger_die && i_SaidLineAlready[npc.index] < 9)
+		{
+			i_SaidLineAlready[npc.index] = 9;
+			CPrintToChatAll("{green}감염된 전령병{crimson}: 내일이 전역이란 말이다!!!!");
+		}
+		else if(gameTime + 5.0 > g_infected_messenger_die && i_SaidLineAlready[npc.index] < 8)
+		{
+			i_SaidLineAlready[npc.index] = 8;
+			CPrintToChatAll("{green}감염된 전령병{default}: 이런 식으로 죽고 싶지 않아!");
+		}
+		else if(gameTime + 8.0 > g_infected_messenger_die && i_SaidLineAlready[npc.index] < 7)
+		{
+			i_SaidLineAlready[npc.index] = 7;
+			CPrintToChatAll("{green}감염된 전령병{default}: 안돼...이런 식으로 죽고 싶진 않아....");
+		}
+		else if(gameTime + 10.0 > g_infected_messenger_die && i_SaidLineAlready[npc.index] < 6)
+		{
+			i_SaidLineAlready[npc.index] = 6;
+			CPrintToChatAll("{green}감염된 전령병{default}: 대체 누가 내몸에 이런 짓을...빌어먹을 행보관인가?");
+		}
+		else if(gameTime + 12.0 > g_infected_messenger_die && i_SaidLineAlready[npc.index] < 5)
+		{
+			i_SaidLineAlready[npc.index] = 5;
+			CPrintToChatAll("{green}감염된 전령병{default}: 이런 젠장 이건 말도 안돼...");
+		}
+		else if(gameTime + 14.0 > g_infected_messenger_die && i_SaidLineAlready[npc.index] < 4)
+		{
+			i_SaidLineAlready[npc.index] = 4;
+			CPrintToChatAll("{green}감염된 전령병{crimson}: 잠깐만");
+		}
+		else if(gameTime + 16.0 > g_infected_messenger_die && i_SaidLineAlready[npc.index] < 3)
+		{
+			i_SaidLineAlready[npc.index] = 3;
+			CPrintToChatAll("{green}감염된 전령병{default}: 속이 뭔가 이상한데...뭔가 더부룩한게...");
+		}
+		else if(gameTime + 18.0 > g_infected_messenger_die && i_SaidLineAlready[npc.index] < 2)
+		{
+			i_SaidLineAlready[npc.index] = 2;
+			CPrintToChatAll("{green}감염된 전령병{default}: 이대로 죽을빠에 이곳에 폭격지원을 요청하겠....우욱");
+		}
+		else if(gameTime + 20.0 > g_infected_messenger_die && i_SaidLineAlready[npc.index] < 1)
+		{
+			i_SaidLineAlready[npc.index] = 1;
+			CPrintToChatAll("{green}감염된 전령병{default}: 안돼....이대로 죽을순 없어...");
+		}
 	}
 
     npc.PlayIdleSound();
@@ -330,26 +400,63 @@ public Action InfectedMessenger_OnTakeDamage(int victim, int &attacker, int &inf
 		if(!npc.m_bAlliesSummoned)
 		{
 			npc.m_bAlliesSummoned = true;
-			Spawn_Chaos(npc);
+			Spawn_Reinforcements(npc);
 			npc.PlaySummonSound();
 		}
 		CPrintToChatAll("{green}감염된 전령병{default}: 젠장 기습이다! 지금 당장 여기에 지원이 필요하다!");
 	}
 	if(RoundToCeil(damage) >= GetEntProp(npc.index, Prop_Data, "m_iHealth"))
 	{
-		switch(GetRandomInt(0,1))
+		if(!g_infected_messenger_died)
 		{
-			case 0:
-			{
-				CPrintToChatAll("{green}감염된 전령병{crimson}: 내일이면 전역인데...");
-			}
-			case 1:
-			{
-				CPrintToChatAll("{green}감염된 전령병{default}: 말뚝박기 싫은데..");
-			}
+			b_NpcIsInvulnerable[npc.index] = true;
+			b_ThisEntityIgnoredByOtherNpcsAggro[npc.index] = true;
+			g_infected_messenger_died=true;
+			npc.m_bThisNpcIsABoss = false;
+			if(EntRefToEntIndex(RaidBossActive)==npc.index)
+				RaidBossActive = INVALID_ENT_REFERENCE;
+			g_infected_messenger_die = GetGameTime(npc.index) + 22.0;
+			
+			SetEntProp(npc.index, Prop_Data, "m_iHealth", 1);
+			damage = 0.0;
 		}
 	}
 	return Plugin_Changed;
+}
+static void Spawn_Reinforcements(InfectedMessenger npc)
+{
+	float pos[3]; GetEntPropVector(npc.index, Prop_Data, "m_vecAbsOrigin", pos);
+	float ang[3]; GetEntPropVector(npc.index, Prop_Data, "m_angRotation", ang);
+	int maxhealth = ReturnEntityMaxHealth(npc.index);
+	int heck;
+	int spawn_index;
+	heck= maxhealth;
+	maxhealth= heck;
+
+	spawn_index = NPC_CreateByName("npc_zs_cleaner", npc.index, pos, ang, GetTeam(npc.index));
+	NpcAddedToZombiesLeftCurrently(spawn_index, true);
+	if(spawn_index > MaxClients)
+	{
+		NpcStats_CopyStats(npc.index, spawn_index);
+		SetEntProp(spawn_index, Prop_Data, "m_iHealth", maxhealth);
+		SetEntProp(spawn_index, Prop_Data, "m_iMaxHealth", maxhealth);
+	}
+	spawn_index = NPC_CreateByName("npc_zs_sniper", npc.index, pos, ang, GetTeam(npc.index));
+	NpcAddedToZombiesLeftCurrently(spawn_index, true);
+	if(spawn_index > MaxClients)
+	{
+		NpcStats_CopyStats(npc.index, spawn_index);
+		SetEntProp(spawn_index, Prop_Data, "m_iHealth", maxhealth);
+		SetEntProp(spawn_index, Prop_Data, "m_iMaxHealth", maxhealth);
+	}
+	spawn_index = NPC_CreateByName("npc_zs_ihbc", npc.index, pos, ang, GetTeam(npc.index));
+	NpcAddedToZombiesLeftCurrently(spawn_index, true);
+	if(spawn_index > MaxClients)
+	{
+		NpcStats_CopyStats(npc.index, spawn_index);
+		SetEntProp(spawn_index, Prop_Data, "m_iHealth", maxhealth);
+		SetEntProp(spawn_index, Prop_Data, "m_iMaxHealth", maxhealth);
+	}
 }
 static void Spawn_Chaos(InfectedMessenger npc)
 {
@@ -360,7 +467,7 @@ static void Spawn_Chaos(InfectedMessenger npc)
 	int spawn_index;
 	heck= maxhealth;
 	maxhealth= heck;
-	CPrintToChatAll("{crimson} 전령병이 알 수 없는 무언가들을 불러냈습니다.", NpcStats_ReturnNpcName(npc.index, true));
+	CPrintToChatAll("{crimson} 전령병의 몸을 찢고 끔찍한 것들이 튀어나왔습니다...", NpcStats_ReturnNpcName(npc.index, true));
 
 	spawn_index = NPC_CreateByName("npc_zs_stranger", npc.index, pos, ang, GetTeam(npc.index));
 	NpcAddedToZombiesLeftCurrently(spawn_index, true);
@@ -396,7 +503,6 @@ static void ClotDeath(int entity)
 	if(!npc.m_bGib)
 		npc.PlayDeathSound();
 	
-	SpawnMoney(npc.index);
 	if(IsValidEntity(npc.m_iWearable1))
 		RemoveEntity(npc.m_iWearable1);
 	

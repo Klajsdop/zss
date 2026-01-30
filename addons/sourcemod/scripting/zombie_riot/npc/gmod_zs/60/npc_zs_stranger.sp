@@ -281,7 +281,7 @@ public void StrangPyro_NPCDeath(int entity)
 	{
 		npc.PlayDeathSound();	
 	}
-	SpawnMoney(npc.index);
+	SpawnMoney(entity, true);
 	if(IsValidEntity(npc.m_iWearable1))
 		RemoveEntity(npc.m_iWearable1);
 	if(IsValidEntity(npc.m_iWearable2))

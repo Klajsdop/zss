@@ -260,7 +260,7 @@ static int ZSoldierGrave_Work(ZSoldierGrave npc, float gameTime, int target, flo
 			WorldSpaceCenter(Enemy_I_See, vecTarget);
 			PredictSubjectPositionForProjectiles(npc, target, ProjectileSpeed, _,vecTarget);
 			npc.FaceTowards(vecTarget, 20000.0);
-			npc.FireRocket(vecTarget, 200.0, ProjectileSpeed);
+			npc.FireRocket(vecTarget, 135.0, ProjectileSpeed);
 			npc.PlayRangeSound();
 
 			npc.m_flNextRangedAttack=gameTime+2.0;

@@ -1173,6 +1173,10 @@ void NPC_ConfigSetup()
 	DemonDevoterOnMapStart();
 	DungeonLoot_MapStart();
 	
+	// Foolish
+	EasyBobTheFirst_OnMapStart();
+	EasyAlaxios_OnMapStart();
+	
 	// Gmod ZS
 	ZSZombie_OnMapStart_NPC();
 	ZSHeadcrab_OnMapStart_NPC();
@@ -1225,11 +1229,20 @@ void NPC_ConfigSetup()
 	InfectedBattleMedic_OnMapStart_NPC();
 	InfectedFatSpy_Precache();
 	InfectedCleaner_OnMapStart_NPC();
+	InfectedFireFighter_OnMapStart_NPC();
 	ZSCombineElite_OnMapStart_NPC();
 	ZSVILEPoisonheadcrabZombie_OnMapStart_NPC();
 	StrangPyro_OnMapStart_NPC();
 	InfectedMessengerOnMapStart();
 	InfectedHazardous_OnMapStart_NPC();
+	BreadMonster_Precache();
+	ZsMalfuncHeavy_OnMapStart_NPC();
+	RedMarrow_OnMapStart_NPC();
+	InfectedSniperOnMapStart();
+	Bonemesh_OnMapStart_NPC();
+	DasNaggenvatcher_OnMapStart();
+	StoneAgeMaker_OnMapStart_NPC();
+	MassShootingLover_OnMapStart_NPC();
 	Allymedic_OnMapStart_NPC();
 	Allysoldier_OnMapStart_NPC();
 	Allyheavy_OnMapStart_NPC();
@@ -2621,6 +2634,10 @@ Action NpcSpecificOnTakeDamage(int victim, int &attacker, int &inflictor, float 
 #include "npc/construction/construction2/npc_demon_devoter.sp"
 #include "npc/construction/npc_dungeon_loot.sp"
 
+// Foolish
+#include "npc/foolish/npc_easy_god_alaxios.sp"
+#include "npc/foolish/npc_easy_bob_the_first_last_savior.sp"
+
 // Gmod ZS
 #include "npc/gmod_zs/15/npc_zs_zombie.sp"
 #include "npc/gmod_zs/15/npc_zs_headcrab.sp"
@@ -2662,6 +2679,11 @@ Action NpcSpecificOnTakeDamage(int victim, int &attacker, int &inflictor, float 
 #include "npc/gmod_zs/60/npc_zs_stranger.sp"
 #include "npc/gmod_zs/60/npc_zs_soldier_messenger.sp"
 #include "npc/gmod_zs/60/npc_zs_ihbc.sp"
+#include "npc/gmod_zs/60/npc_zs_firefighter.sp"
+#include "npc/gmod_zs/60/npc_zs_zombie_breadmonster.sp"
+#include "npc/gmod_zs/60/npc_zs_sniper.sp"
+#include "npc/gmod_zs/60/npc_zs_sam.sp"
+#include "npc/gmod_zs/60/npc_zs_mlsm.sp"
 #include "npc/gmod_zs/npc_zs_zmain.sp"
 #include "npc/gmod_zs/special/npc_zs_flesh_creeper.sp"
 #include "npc/gmod_zs/special/npc_zs_nest.sp"
@@ -2672,12 +2694,16 @@ Action NpcSpecificOnTakeDamage(int victim, int &attacker, int &inflictor, float 
 #include "npc/gmod_zs/special/npc_zs_the_shit_slapper.sp"
 #include "npc/gmod_zs/special/npc_zs_butcher.sp"
 #include "npc/gmod_zs/special/npc_zs_bastardzine.sp"
+#include "npc/gmod_zs/special/npc_zs_malfunctioning_heavy.sp"
+#include "npc/gmod_zs/special/npc_zs_red_marrow.sp"
+#include "npc/gmod_zs/special/npc_zs_bonemesh.sp"
 #include "npc/gmod_zs/bosses/npc_zs_nightmare.sp"
 #include "npc/gmod_zs/bosses/npc_zs_sphynx.sp"
 #include "npc/gmod_zs/bosses/npc_zs_pregnant.sp"
 #include "npc/gmod_zs/bosses/npc_major_vulture.sp"
 #include "npc/gmod_zs/bosses/npc_zs_soldier_barrager.sp"
 #include "npc/gmod_zs/bosses/npc_zs_unspeakable.sp"
+#include "npc/gmod_zs/bosses/npc_doctor_unclean_one.sp"
 #include "npc/gmod_zs/npc_zs_ally_medic.sp"
 #include "npc/gmod_zs/npc_zs_ally_soldier.sp"
 #include "npc/gmod_zs/npc_zs_ally_heavy.sp"

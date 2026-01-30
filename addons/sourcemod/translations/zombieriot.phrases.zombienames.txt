@@ -7891,6 +7891,71 @@
 		"en"	"Chaos Pyro"
 		"ko"	"카오스 파이로"
 	}
+	"Infected Messenger Soldier"
+	{
+		"en"	"Infected Messenger Soldier"
+		"ko"	"감염된 전령병"
+	}
+	"Infected Hazardous Bio-material Collector"
+	{
+		"en"	"Infected Hazardous Bio-material Collector"
+		"ko"	"감염된 유해환경 생체물질 수집가"
+	}
+	"Infected Fire Fighter"
+	{
+		"en"	"Infected Fire Fighter"
+		"ko"	"감염된 소방관"
+	}
+	"Infected Bread Monster"
+	{
+		"en"	"Infected Bread Monster"
+		"ko"	"감염된 빵괴물"
+	}
+	"The neighborhood tough guy"
+	{
+		"en"	"The neighborhood tough guy"
+		"ko"	"동네힘쎈사람"
+	}
+	"Vile Poison Zombie"
+	{
+		"en"	"Vile Poison Zombie"
+		"ko"	"오염된 포이즌 좀비"
+	}
+	"Red Marrow"
+	{
+		"en"	"Red Marrow"
+		"ko"	"레드 머로우"
+	}
+	"OverHeater"
+	{
+		"en"	"OverHeater"
+		"ko"	"오버히터"
+	}
+	"Bonemesh"
+	{
+		"en"	"Bonemesh"
+		"ko"	"본매쉬"
+	}
+	"Infected Sniper"
+	{
+		"en"	"Infected Sniper"
+		"ko"	"감염된 스나이퍼"
+	}
+	"Das Naggenvatcher Doctor"
+	{
+		"en"	"Das Naggenvatcher Doctor"
+		"ko"	"다스 고르통보호기 메딕"
+	}
+	"Stone Age Maker"
+	{
+		"en"	"Stone Age Maker"
+		"ko"	"석기시대 제작자"
+	}
+	"Mass Shooting Lover Marine"
+	{
+		"en"	"Mass Shooting Lover Marine"
+		"ko"	"총 기난사가너무좋아 해병"
+	}
 	"Pheromone Elemental Damage"
 	{
 		"en"	"Pheromone Elemental Damage"

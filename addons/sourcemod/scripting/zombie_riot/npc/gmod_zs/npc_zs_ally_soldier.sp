@@ -303,7 +303,7 @@ static int Allysoldier_Work(Allysoldier npc, float gameTime, int target, float d
 			WorldSpaceCenter(Enemy_I_See, vecTarget);
 			PredictSubjectPositionForProjectiles(npc, target, ProjectileSpeed, _,vecTarget);
 			npc.FaceTowards(vecTarget, 20000.0);
-			npc.FireRocket(vecTarget, 140.0, ProjectileSpeed);
+			npc.FireRocket(vecTarget, 270.0, ProjectileSpeed);
 			npc.PlayRangeSound();
 
 			npc.m_flNextRangedAttack=gameTime + 2.0;

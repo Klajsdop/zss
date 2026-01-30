@@ -128,6 +128,10 @@ methodmap ZSMedicHealer < CClotBody
 		
 		SetEntProp(npc.m_iWearable1, Prop_Send, "m_nSkin", 1);
 		
+		npc.m_iWearable2	= npc.EquipItem("head", "models/workshop/player/items/medic/jul13_emergency_supplies/jul13_emergency_supplies.mdl");
+		SetVariantString("1.0");
+		AcceptEntityInput(npc.m_iWearable2, "SetModelScale");
+		
 		npc.m_iWearable3 = npc.EquipItem("head", "models/weapons/c_models/c_medigun/c_medigun.mdl");
 		SetVariantString("1.0");
 		AcceptEntityInput(npc.m_iWearable3, "SetModelScale");
@@ -262,8 +266,6 @@ public void ZSMedicHealer_ClotThink(int iNPC)
 			npc.m_iWearable3 = npc.EquipItem("head", "models/weapons/c_models/c_ubersaw/c_ubersaw.mdl");
 			SetVariantString("1.0");
 			AcceptEntityInput(npc.m_iWearable3, "SetModelScale");
-			
-			SetEntityRenderColor(npc.m_iWearable2, 255, 255, 0, 255);
 		
 			if(IsValidEntity(npc.m_iWearable4))
 				RemoveEntity(npc.m_iWearable4);

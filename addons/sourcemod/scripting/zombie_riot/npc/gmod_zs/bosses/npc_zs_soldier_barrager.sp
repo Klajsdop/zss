@@ -117,7 +117,7 @@ methodmap ZsSoldier_Barrager < CClotBody
 	}
 	public ZsSoldier_Barrager(float vecPos[3], float vecAng[3], int ally)
 	{
-		ZsSoldier_Barrager npc = view_as<ZsSoldier_Barrager>(CClotBody(vecPos, vecAng, "models/player/Soldier.mdl", "1.35", "45000", ally));
+		ZsSoldier_Barrager npc = view_as<ZsSoldier_Barrager>(CClotBody(vecPos, vecAng, "models/player/Soldier.mdl", "1.15", "45000", ally));
 		
 		i_NpcWeight[npc.index] = 1;
 		

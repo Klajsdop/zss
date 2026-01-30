@@ -101,7 +101,7 @@ methodmap Zsvulture < CClotBody
 	
 	public Zsvulture(float vecPos[3], float vecAng[3], int ally)
 	{
-		Zsvulture npc = view_as<Zsvulture>(CClotBody(vecPos, vecAng, "models/player/pyro.mdl", "1.35", "50000", ally));
+		Zsvulture npc = view_as<Zsvulture>(CClotBody(vecPos, vecAng, "models/player/pyro.mdl", "1.15", "50000", ally));
 		
 		i_NpcWeight[npc.index] = 1;
 		FormatEx(c_HeadPlaceAttachmentGibName[npc.index], sizeof(c_HeadPlaceAttachmentGibName[]), "head");

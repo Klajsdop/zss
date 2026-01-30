@@ -116,7 +116,7 @@ methodmap ZsSpy < CClotBody
 
 	public ZsSpy(float vecPos[3], float vecAng[3], int ally, const char[] data)
 	{
-		ZsSpy npc = view_as<ZsSpy>(CClotBody(vecPos, vecAng, "models/player/spy.mdl", "1.0", "750", ally, false, false, true));
+		ZsSpy npc = view_as<ZsSpy>(CClotBody(vecPos, vecAng, "models/player/spy.mdl", "1.0", "5000", ally, false, false, true));
 		
 		i_NpcWeight[npc.index] = 1;
 		FormatEx(c_HeadPlaceAttachmentGibName[npc.index], sizeof(c_HeadPlaceAttachmentGibName[]), "head");

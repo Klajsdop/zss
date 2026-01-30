@@ -2,18 +2,23 @@
 #pragma newdecls required
  
 static const char g_DeathSounds[][] = {
-	"npc/ichthyosaur/water_growl5.wav",
+	"npc/zombie/zombie_die1.wav",
+	"npc/zombie/zombie_die2.wav",
+	"npc/zombie/zombie_die3.wav",
 };
 
 static const char g_HurtSounds[][] = {
-	"npc/zombie_poison/pz_idle2.wav",
-	"npc/zombie_poison/pz_idle3.wav",
+    "npc/metropolice/pain1.wav",
+    "npc/metropolice/pain2.wav",
+    "npc/metropolice/pain3.wav",
+    "npc/metropolice/pain4.wav",
 };
 
 static const char g_IdleSounds[][] = {
-	"npc/barnacle/barnacle_tongue_pull1.wav",
-	"npc/barnacle/barnacle_tongue_pull2.wav",
-	"npc/barnacle/barnacle_tongue_pull3.wav",
+    "npc/strider/creak1.wav",
+    "npc/strider/creak2.wav",
+    "npc/strider/creak3.wav",
+    "npc/strider/creak4.wav",
 };
 
 static const char g_MeleeHitSounds[][] = {
@@ -22,17 +27,15 @@ static const char g_MeleeHitSounds[][] = {
 	"npc/fast_zombie/claw_strike3.wav",
 };
 static const char g_MeleeAttackSounds[][] = {
-	"npc/ichthyosaur/attack_growl1.wav",
-	"npc/ichthyosaur/attack_growl2.wav",
-	"npc/ichthyosaur/attack_growl3.wav",
+	"npc/fast_zombie/wake1.wav",
 };
 
 static const char g_MeleeMissSounds[][] = {
 	"npc/fast_zombie/claw_miss1.wav",
 	"npc/fast_zombie/claw_miss2.wav",
 };
-
-public void VileBloatedZombie_OnMapStart_NPC()
+float g_flRedMarrowAccumulatedDamage[2048]; 
+public void RedMarrow_OnMapStart_NPC()
 {
 	for (int i = 0; i < (sizeof(g_DeathSounds));	   i++) { PrecacheSound(g_DeathSounds[i]);	   }
 	for (int i = 0; i < (sizeof(g_HurtSounds));		i++) { PrecacheSound(g_HurtSounds[i]);		}
@@ -44,9 +47,9 @@ public void VileBloatedZombie_OnMapStart_NPC()
 	PrecacheSound("player/flow.wav");
 	PrecacheModel("models/zombie_riot/gmod_zs/zs_zombie_models_1_1.mdl");
 	NPCData data;
-	strcopy(data.Name, sizeof(data.Name), "Vile Bloated Zombie");
-	strcopy(data.Plugin, sizeof(data.Plugin), "npc_zs_vile_bloated_zombie");
-	strcopy(data.Icon, sizeof(data.Icon), "gmod_zs_vile_bloated_zombie");
+	strcopy(data.Name, sizeof(data.Name), "Red Marrow");
+	strcopy(data.Plugin, sizeof(data.Plugin), "npc_zs_red_marrow");
+	strcopy(data.Icon, sizeof(data.Icon), "ds_defender");
 	data.IconCustom = true;
 	data.Flags = 0;
 	data.Category = Type_GmodZS;
@@ -56,22 +59,15 @@ public void VileBloatedZombie_OnMapStart_NPC()
 
 static any ClotSummon(int client, float vecPos[3], float vecAng[3], int team)
 {
-	return VileBloatedZombie(vecPos, vecAng, team);
+	return RedMarrow(vecPos, vecAng, team);
 }
 
-methodmap VileBloatedZombie < CClotBody
+methodmap RedMarrow < CClotBody
 {
-	property bool m_bElite
-	{
-		public get()
-		{
-			return this.m_iMedkitAnnoyance == 1;
-		}
-	}
 	public void PlayIdleSound() {
 		if(this.m_flNextIdleSound > GetGameTime(this.index))
 			return;
-		EmitSoundToAll(g_IdleSounds[GetRandomInt(0, sizeof(g_IdleSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME);
+		EmitSoundToAll(g_IdleSounds[GetRandomInt(0, sizeof(g_IdleSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, GetRandomInt(115, 125));
 		this.m_flNextIdleSound = GetGameTime(this.index) + GetRandomFloat(3.0, 6.0);
 	}
 	
@@ -81,15 +77,15 @@ methodmap VileBloatedZombie < CClotBody
 			
 		this.m_flNextHurtSound = GetGameTime(this.index) + 0.4;
 		
-		EmitSoundToAll(g_HurtSounds[GetRandomInt(0, sizeof(g_HurtSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, GetRandomInt(75, 85));
+		EmitSoundToAll(g_HurtSounds[GetRandomInt(0, sizeof(g_HurtSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, GetRandomInt(70, 75));
 	}
 	public void PlayDeathSound() {
 	
-		EmitSoundToAll(g_DeathSounds[GetRandomInt(0, sizeof(g_DeathSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME);
+		EmitSoundToAll(g_DeathSounds[GetRandomInt(0, sizeof(g_DeathSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, GetRandomInt(122, 128));
 		
 	}
 	public void PlayMeleeSound() {
-		EmitSoundToAll(g_MeleeAttackSounds[GetRandomInt(0, sizeof(g_MeleeAttackSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, GetRandomInt(145, 155));
+		EmitSoundToAll(g_MeleeAttackSounds[GetRandomInt(0, sizeof(g_MeleeAttackSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, GetRandomInt(115, 140));
 	}
 	public void PlayMeleeHitSound() {
 		EmitSoundToAll(g_MeleeHitSounds[GetRandomInt(0, sizeof(g_MeleeHitSounds) - 1)], this.index, SNDCHAN_STATIC, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME);
@@ -97,21 +93,21 @@ methodmap VileBloatedZombie < CClotBody
 	public void PlayMeleeMissSound() {
 		EmitSoundToAll(g_MeleeMissSounds[GetRandomInt(0, sizeof(g_MeleeMissSounds) - 1)], this.index, SNDCHAN_STATIC, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME);
 	}
-	public void PlayRangedSound() {
-		EmitSoundToAll(g_MeleeMissSounds[GetRandomInt(0, sizeof(g_MeleeMissSounds) - 1)], this.index, SNDCHAN_STATIC, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME);
-	}
 	
-	public VileBloatedZombie(float vecPos[3], float vecAng[3], int ally)
+	public RedMarrow(float vecPos[3], float vecAng[3], int ally)
 	{
-		VileBloatedZombie npc = view_as<VileBloatedZombie>(CClotBody(vecPos, vecAng, "models/zombie_riot/gmod_zs/zs_zombie_models_1_1.mdl", "1.25", "7200", ally, false));
+		RedMarrow npc = view_as<RedMarrow>(CClotBody(vecPos, vecAng, "models/zombie_riot/gmod_zs/zs_zombie_models_1_1.mdl", "1.35", "15000", ally, false));
 		
 		i_NpcWeight[npc.index] = 1;
 		
 		FormatEx(c_HeadPlaceAttachmentGibName[npc.index], sizeof(c_HeadPlaceAttachmentGibName[]), "head");
 		
-		int iActivity = npc.LookupActivity("ACT_HL2MP_RUN_ZOMBIE");
+		int iActivity = npc.LookupActivity("ACT_HL2MP_WALK_ZOMBIE_01");
 		if(iActivity > 0) npc.StartActivity(iActivity);
-		
+		if(npc.index > 0 && npc.index < 2048)
+        {
+            g_flRedMarrowAccumulatedDamage[npc.index] = 0.0;
+        }
 
 		npc.m_flNextMeleeAttack = 0.0;
 		
@@ -119,13 +115,16 @@ methodmap VileBloatedZombie < CClotBody
 		npc.m_iStepNoiseType = STEPSOUND_NORMAL;	
 		npc.m_iNpcStepVariation = STEPTYPE_NORMAL;
 		
-		npc.m_flSpeed = 200.0;
-		func_NPCDeath[npc.index] = VileBloatedZombie_NPCDeath;
-		func_NPCThink[npc.index] = VileBloatedZombie_ClotThink;
-		func_NPCOnTakeDamage[npc.index] = Generic_OnTakeDamage;
+		npc.m_flSpeed = 205.0;
+		func_NPCDeath[npc.index] = RedMarrow_NPCDeath;
+		func_NPCThink[npc.index] = RedMarrow_ClotThink;
+		func_NPCOnTakeDamage[npc.index] = RedMarrow_OnTakeDamage;
 		
 		SetEntityRenderMode(npc.index, RENDER_TRANSCOLOR);
-		SetEntityRenderColor(npc.index, 150, 255, 150, 255);
+		SetEntityRenderColor(npc.index, 255, 0, 0, 255);
+
+        npc.m_flMeleeArmor = 0.77;
+		npc.m_flRangedArmor = 0.7;
 
 		npc.StartPathing();
 		
@@ -133,18 +132,18 @@ methodmap VileBloatedZombie < CClotBody
 	}
 }
 
-public void VileBloatedZombie_ClotThink(int iNPC)
+public void RedMarrow_ClotThink(int iNPC)
 {
-	VileBloatedZombie npc = view_as<VileBloatedZombie>(iNPC);
-	
-	SetEntProp(npc.index, Prop_Send, "m_nBody", GetEntProp(npc.index, Prop_Send, "m_nBody"));
-	SetVariantInt(128);
-	AcceptEntityInput(iNPC, "SetBodyGroup");
+	RedMarrow npc = view_as<RedMarrow>(iNPC);
 	
 	if(npc.m_flNextDelayTime > GetGameTime(npc.index))
 	{
 		return;
 	}
+	
+	SetEntProp(npc.index, Prop_Send, "m_nBody", GetEntProp(npc.index, Prop_Send, "m_nBody"));
+	SetVariantInt(64);
+	AcceptEntityInput(iNPC, "SetBodyGroup");
 	
 	npc.m_flNextDelayTime = GetGameTime(npc.index) + DEFAULT_UPDATE_DELAY_FLOAT;
 	
@@ -220,10 +219,9 @@ public void VileBloatedZombie_ClotThink(int iNPC)
 						{
 							{
 								if(!ShouldNpcDealBonusDamage(target))
-									SDKHooks_TakeDamage(target, npc.index, npc.index, 350.0, DMG_CLUB, -1, _, vecHit);
+									SDKHooks_TakeDamage(target, npc.index, npc.index, 80.0, DMG_CLUB, -1, _, vecHit);
 								else
-									SDKHooks_TakeDamage(target, npc.index, npc.index, 1000.0, DMG_CLUB, -1, _, vecHit);
-									Elemental_AddPheromoneDamage(target, npc.index, npc.index ? 10 : 10);
+									SDKHooks_TakeDamage(target, npc.index, npc.index, 120.0, DMG_CLUB, -1, _, vecHit);					
 							}
 							
 							npc.PlayMeleeHitSound();
@@ -234,13 +232,13 @@ public void VileBloatedZombie_ClotThink(int iNPC)
 						}
 					}
 					delete swingTrace;
-					npc.m_flNextMeleeAttack = GetGameTime(npc.index) + 1.2;
+					npc.m_flNextMeleeAttack = GetGameTime(npc.index) + 0.74;
 					npc.m_flAttackHappenswillhappen = false;
 				}
 				else if (npc.m_flAttackHappens_bullshit < GetGameTime(npc.index) && npc.m_flAttackHappenswillhappen)
 				{
 					npc.m_flAttackHappenswillhappen = false;
-					npc.m_flNextMeleeAttack = GetGameTime(npc.index) + 1.2;
+					npc.m_flNextMeleeAttack = GetGameTime(npc.index) + 0.74;
 				}
 			}
 			
@@ -256,18 +254,64 @@ public void VileBloatedZombie_ClotThink(int iNPC)
 	npc.PlayIdleSound();
 }
 
-public void VileBloatedZombie_NPCDeath(int entity)
+public Action RedMarrow_OnTakeDamage(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &weapon, float damageForce[3], float damagePosition[3], int damagecustom)
 {
-	VileBloatedZombie npc = view_as<VileBloatedZombie>(entity);
+    if(attacker <= 0 || victim <= 0 || !IsValidEntity(victim))
+        return Plugin_Continue;
+
+    // 2. 최대 체력 가져오기 (npc.iMaxHealth 에러 시 대체제)
+    int maxHealth = GetEntProp(victim, Prop_Data, "m_iMaxHealth");
+    float threshold = float(maxHealth) * 0.25;
+
+    if (threshold <= 0.0) return Plugin_Continue;
+
+    // 3. 데미지 누적 및 트리거 체크
+    g_flRedMarrowAccumulatedDamage[victim] += damage;
+    
+    RedMarrow npc = view_as<RedMarrow>(victim);
+
+    while(g_flRedMarrowAccumulatedDamage[victim] >= threshold)
+    {
+        g_flRedMarrowAccumulatedDamage[victim] -= threshold;
+
+        if(!NpcStats_IsEnemySilenced(victim))
+        {
+            // 속성값이 확실히 존재하는지 확인 후 적용
+            npc.bXenoInfectedSpecialHurt = true;
+            npc.flXenoInfectedSpecialHurtTime = GetGameTime() + 5.0;
+            
+            ApplyStatusEffect(victim, victim, "Unstoppable Force", 5.0);
+            
+            CreateTimer(5.0, RedMarrow_Revert_Resistance_Enable, EntIndexToEntRef(victim), TIMER_FLAG_NO_MAPCHANGE);
+        }
+    }
+
+    // 헤드샷 쿨다운 로직 (기존 유지)
+    if (npc.m_flHeadshotCooldown < GetGameTime())
+    {
+        npc.m_flHeadshotCooldown = GetGameTime() + DEFAULT_HURTDELAY;
+        npc.m_blPlayHurtAnimation = true;
+    }
+    
+    return Plugin_Continue;
+}
+
+public Action RedMarrow_Revert_Resistance_Enable(Handle timer, int ref)
+{
+	int zombie = EntRefToEntIndex(ref);
+	if(IsValidEntity(zombie))
+	{
+		RedMarrow npc = view_as<RedMarrow>(zombie);
+		npc.bXenoInfectedSpecialHurt = false;
+	}
+	return Plugin_Handled;
+}
+public void RedMarrow_NPCDeath(int entity)
+{
+	RedMarrow npc = view_as<RedMarrow>(entity);
 	if(!npc.m_bGib)
 	{
 		npc.PlayDeathSound();	
 	}
-	float vecMe[3]; WorldSpaceCenter(npc.index, vecMe);
-	Explode_Logic_Custom(40.0, npc.index, npc.index, -1, vecMe, 200.0, 1.0, _, true, 15, _, _, VileBloatedZombie_ExplodePost);
-}
-
-static void VileBloatedZombie_ExplodePost(int attacker, int victim, float damage, int weapon)
-{
-	Elemental_AddPheromoneDamage(victim, attacker, view_as<VileBloatedZombie>(attacker).m_bElite ? 15 : 12);
+	if(entity > 0 && entity < 2048) g_flRedMarrowAccumulatedDamage[entity] = 0.0;
 }

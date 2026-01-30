@@ -178,6 +178,8 @@ methodmap ZSFastheadcrabZombie < CClotBody
 		func_NPCThink[npc.index] = ZSFastheadcrabZombie_ClotThink;	
 		func_NPCOnTakeDamage[npc.index] = ZSFastheadcrabZombie_OnTakeDamage;	
 		
+		SetEntityRenderMode(npc.index, RENDER_NORMAL);
+		SetEntityRenderColor(npc.index, 255, 165, 0, 255);
 		
 		//IDLE
 		npc.m_flSpeed = 400.0;
@@ -352,6 +354,8 @@ public Action ZSFastheadcrabZombie_OnTakeDamage(int victim, int &attacker, int &
 		if(!npc.bXenoInfectedSpecialHurt)
 		{
 			npc.bXenoInfectedSpecialHurt = true;
+			SetEntityRenderMode(npc.index, RENDER_NORMAL);
+			SetEntityRenderColor(npc.index, 255, 255, 255, 255);
 			damage = 0.0;
 			EmitSoundToAll("physics/metal/metal_box_impact_bullet1.wav", attacker, SNDCHAN_STATIC, NORMAL_ZOMBIE_SOUNDLEVEL, _, 0.5);
 			return Plugin_Changed;

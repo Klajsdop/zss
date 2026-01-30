@@ -121,6 +121,10 @@ methodmap Allymedic < CClotBody
 		int skin = 0;
 		SetEntProp(npc.index, Prop_Send, "m_nSkin", skin);
 		
+		npc.m_iWearable1 = npc.EquipItem("head", "models/player/items/medic/medic_zombie.mdl");
+		SetVariantString("1.0");
+		AcceptEntityInput(npc.m_iWearable1, "SetModelScale");
+		
 		npc.m_iWearable1 = npc.EquipItem("head", "models/weapons/c_models/c_proto_backpack/c_proto_backpack.mdl");
 		SetVariantString("1.0");
 		AcceptEntityInput(npc.m_iWearable1, "SetModelScale");
@@ -234,7 +238,7 @@ static void Allymedic_ClotThink(int iNPC)
 					npc.StartPathing();
 					npc.m_bisWalking = true;
 					npc.SetActivity("ACT_MP_RUN_SECONDARY");
-					npc.m_flSpeed = 320.0;
+					npc.m_flSpeed = 400.0;
 					npc.m_iChanged_WalkCycle = 0;
 				}
 				if(flDistanceToTarget < npc.GetLeadRadius())
@@ -286,8 +290,6 @@ static void Allymedic_NPCDeath(int entity)
 		npc.PlayDeathSound();
 	
 	Is_a_Medic[npc.index] = false;
-	if(IsValidEntity(npc.m_iWearable7))
-		RemoveEntity(npc.m_iWearable7);
 	if(IsValidEntity(npc.m_iWearable6))
 		RemoveEntity(npc.m_iWearable6);
 	if(IsValidEntity(npc.m_iWearable5))

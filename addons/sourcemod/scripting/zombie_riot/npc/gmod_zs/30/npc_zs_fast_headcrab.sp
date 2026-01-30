@@ -97,6 +97,9 @@ methodmap FastHeadcrab < CSeaBody
 		func_NPCOnTakeDamage[npc.index] = FastHeadcrab_OnTakeDamage;
 		func_NPCThink[npc.index] = FastHeadcrab_ClotThink;
 		
+		SetEntityRenderMode(npc.index, RENDER_NORMAL);
+		SetEntityRenderColor(npc.index, 255, 165, 0, 255);
+		
 		npc.m_flSpeed = 400.0;	// 1.9 x 250
 		npc.m_flGetClosestTargetTime = 0.0;
 		npc.m_flNextMeleeAttack = 0.0;
@@ -259,6 +262,18 @@ public Action FastHeadcrab_OnTakeDamage(int victim, int &attacker, int &inflicto
 	{
 		npc.m_flHeadshotCooldown = GetGameTime(npc.index) + DEFAULT_HURTDELAY;
 		npc.m_blPlayHurtAnimation = true;
+	}
+	if(!NpcStats_IsEnemySilenced(victim))
+	{
+		if(!npc.bXenoInfectedSpecialHurt)
+		{
+			npc.bXenoInfectedSpecialHurt = true;
+			SetEntityRenderMode(npc.index, RENDER_NORMAL);
+			SetEntityRenderColor(npc.index, 255, 255, 255, 255);
+			damage = 0.0;
+			EmitSoundToAll("physics/metal/metal_box_impact_bullet1.wav", attacker, SNDCHAN_STATIC, NORMAL_ZOMBIE_SOUNDLEVEL, _, 0.5);
+			return Plugin_Changed;
+		}
 	}
 	return Plugin_Changed;
 }

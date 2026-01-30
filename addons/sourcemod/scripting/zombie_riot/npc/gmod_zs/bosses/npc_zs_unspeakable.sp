@@ -412,15 +412,15 @@ methodmap ZsUnspeakable < CClotBody
 			{
 				case 0:
 				{
-					CPrintToChatAll("{crimson}불결한 존재{default}: 너희도 우리와 하나가 될것이다.");
+					CPrintToChatAll("{crimson}불결한 존재{default}: 이것이 마지막 테스트다. 운명에 순응하고 우리와 하나가 되어라.");
 				}
 				case 1:
 				{
-					CPrintToChatAll("{crimson}불결한 존재{default}: 영광스러운 합일에 동참하라.");
+					CPrintToChatAll("{crimson}불결한 존재{default}: 이것이 마지막 테스트다. 영광스러운 합일에 동참하라.");
 				}
 				case 2:
 				{
-					CPrintToChatAll("{crimson}불결한 존재{default}: 우리와 하나가 되자.");
+					CPrintToChatAll("{crimson}불결한 존재{default}: 이것이 마지막 테스트다. 끝까지 발악해보거라 어자피 우리와 하나가 될것이니.");
 				}
 			}
 		}
@@ -627,6 +627,7 @@ public void ZsUnspeakable_ClotThink(int iNPC)
 	if(LastMann && !AlreadySaidLastmann)
 	{
 		AlreadySaidLastmann = true;
+		RaidModeTime = GetGameTime() + 10.0;
 		switch(GetRandomInt(0,2))
 		{
 			case 0:
@@ -637,7 +638,7 @@ public void ZsUnspeakable_ClotThink(int iNPC)
 			{
 				CPrintToChatAll("{crimson} 감염이 당신의 동료를 전부 집어삼키고 말았습니다... 가능하면 도주하세요.");
 			}
-			case 3:
+			case 2:
 			{
 				CPrintToChatAll("{crimson}불결한 존재{default}: 발악해보아라. 이것이 너희의 마지막이 될것이니.");
 			}
@@ -873,7 +874,7 @@ static void Spawn_Zombie(ZsUnspeakable npc)
 		CPrintToChatAll("{crimson} 저것이 끔찍한 감염체들을 소환했다.", NpcStats_ReturnNpcName(npc.index, true));
 		maxhealth= (heck/5);	//mid squishy
 
-		spawn_index = NPC_CreateByName("npc_major_vulture", npc.index, pos, ang, GetTeam(npc.index));
+		spawn_index = NPC_CreateByName("npc_random_zombie", npc.index, pos, ang, GetTeam(npc.index));
 		NpcAddedToZombiesLeftCurrently(spawn_index, true);
 		if(spawn_index > MaxClients)
 		{
@@ -883,7 +884,7 @@ static void Spawn_Zombie(ZsUnspeakable npc)
 			SetEntProp(spawn_index, Prop_Data, "m_iMaxHealth", maxhealth);
 		}
 		maxhealth= (heck/5);	//the tankiest
-		spawn_index = NPC_CreateByName("npc_zs_soldier_barrager", npc.index, pos, ang, GetTeam(npc.index));
+		spawn_index = NPC_CreateByName("npc_random_zombie", npc.index, pos, ang, GetTeam(npc.index));
 		NpcAddedToZombiesLeftCurrently(spawn_index, true);
 		if(spawn_index > MaxClients)
 		{

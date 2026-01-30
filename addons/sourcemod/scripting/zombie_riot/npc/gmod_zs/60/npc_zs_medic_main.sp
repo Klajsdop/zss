@@ -456,7 +456,7 @@ static int InfectedBattleMedic_Work(InfectedBattleMedic npc, float gameTime, flo
 						
 						if(IsValidEnemy(npc.index, target))
 						{
-							float damageDealt = 50.0;
+							float damageDealt = 100.0;
 							if(ShouldNpcDealBonusDamage(target))
 								damageDealt*=3.0;
 							SDKHooks_TakeDamage(target, npc.index, npc.index, damageDealt, DMG_CLUB, -1, _, vecHit);

@@ -28,9 +28,11 @@ static void ClotPrecache()
 	NPC_GetByPlugin("npc_zmain_poisonzombie");
 	NPC_GetByPlugin("npc_zs_amplification");
 	NPC_GetByPlugin("npc_zs_howler");
+	NPC_GetByPlugin("npc_zs_red_marrow");
+	NPC_GetByPlugin("npc_zs_bonemesh");
 }
 
-bool SameZombieDisallow[6];
+bool SameZombieDisallow[11];
 static any ClotSummon(int client, float vecPos[3], float vecAng[3], int team, const char[] data)
 {
 	return ZombieSummonRandom(vecPos, vecAng, team, data);
@@ -148,6 +150,16 @@ void ZombieSummonRaidboss(int ZombieSummonbase)
 		case 8:
 		{
 			PluginName = "npc_zs_howler";
+			enemy.Is_Boss = 1;
+		}
+		case 9:
+		{
+			PluginName = "npc_zs_red_marrow";
+			enemy.Is_Boss = 1;
+		}
+		case 10:
+		{
+			PluginName = "npc_zs_bonemesh";
 			enemy.Is_Boss = 1;
 		}
 	}
