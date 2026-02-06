@@ -143,7 +143,7 @@ methodmap ZSZombine < CClotBody
 	
 	public ZSZombine(float vecPos[3], float vecAng[3], int ally)
 	{
-		ZSZombine npc = view_as<ZSZombine>(CClotBody(vecPos, vecAng, "models/zombie/zombie_soldier.mdl", "1.15", "20000", ally, false));
+		ZSZombine npc = view_as<ZSZombine>(CClotBody(vecPos, vecAng, "models/zombie/zombie_soldier.mdl", "1.3", "20000", ally, false));
 		
 		i_NpcWeight[npc.index] = 2;
 		
@@ -180,7 +180,6 @@ public void ZSZombine_ClotThink(int iNPC)
 {
 	ZSZombine npc = view_as<ZSZombine>(iNPC);
 	
-//	PrintToChatAll("%.f",GetEntPropFloat(view_as<int>(iNPC), Prop_Data, "m_speed"));
 	float gameTime = GetGameTime(npc.index);
 	if(npc.m_flNextDelayTime > GetGameTime(npc.index))
 	{
@@ -188,11 +187,11 @@ public void ZSZombine_ClotThink(int iNPC)
 	}
 	if(npc.m_flAbilityOrAttack0 < gameTime)
 	{
-		npc.m_flAbilityOrAttack0 = gameTime + 5.0;
-		
+		npc.m_flAbilityOrAttack0 = gameTime + 0.5;
 		int target = GetClosestAlly(npc.index, (250.0 * 250.0), _);
-		if(target)
+		if(target && !b_thisNpcIsARaid[target])
 		{
+				
 			GrantEntityArmor(target, true, 0.5, 0.5, 0);
 			ChaosSupporter npc1 = view_as<ChaosSupporter>(npc.index);
 			float ProjectileLoc[3];

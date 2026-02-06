@@ -274,6 +274,7 @@ static void Allysoldier_ClotThink(int iNPC)
                 npc.m_iChanged_WalkCycle = 0;
                 npc.m_flSpeed = 240.0;
                 npc.SetActivity("ACT_MP_RUN_PRIMARY");
+				npc.FaceTowards(vecTarget, 20000.0);
                 npc.SetGoalEntity(ally);
                 npc.StartPathing();
                 return; // 중요: 이동 명령을 내렸으므로 아래의 StopPathing을 건너뜀

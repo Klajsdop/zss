@@ -91,7 +91,7 @@ static void ClotPrecache()
 	PrecacheSoundArray(g_TeleportSound);
 	PrecacheSound(g_Jump_sound);
 	PrecacheSound(g_SuicideSound);
-	PrecacheSoundCustom("#zombiesurvival/void_wave/center_of_the_void_1.mp3");
+	PrecacheSoundCustom("#zombiesurvival/void_wave/unspeakable_raid.mp3");
 }
 
 static any ClotSummon(int client, float vecPos[3], float vecAng[3], int team, const char[] data)
@@ -821,7 +821,7 @@ public Action ZsUnspeakable_OnTakeDamage(int victim, int &attacker, int &inflict
 		{
 			if(i_RaidGrantExtra[npc.index] >= 4)
 			{
-				SensalGiveShield(npc.index, CountPlayersOnRed(1) * 3);
+				SensalGiveShield(npc.index, CountPlayersOnRed(1) * 24);
 			}
 			npc.g_TimesSummoned++;
 			ApplyStatusEffect(npc.index, npc.index, "Defensive Backup", 5.0);

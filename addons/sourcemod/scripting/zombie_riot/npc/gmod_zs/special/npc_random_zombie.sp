@@ -24,8 +24,6 @@ static void ClotPrecache()
 	NPC_GetByPlugin("npc_zs_the_shit_slapper");
 	NPC_GetByPlugin("npc_zs_bastardzine");
 	NPC_GetByPlugin("npc_zs_butcher");
-	NPC_GetByPlugin("npc_zs_hmo");
-	NPC_GetByPlugin("npc_zs_manhattan_parrot");
 	NPC_GetByPlugin("npc_zs_amplification");
 	NPC_GetByPlugin("npc_zs_howler");
 	NPC_GetByPlugin("npc_zs_zombine");
@@ -33,7 +31,7 @@ static void ClotPrecache()
 	NPC_GetByPlugin("npc_zs_red_marrow");
 }
 
-bool SameZombieDisallow[12];
+bool SameZombieDisallow[10];
 static any ClotSummon(int client, float vecPos[3], float vecAng[3], int team, const char[] data)
 {
 	return ZombieSummonRandom(vecPos, vecAng, team, data);
@@ -135,35 +133,25 @@ void ZombieSummonRaidboss(int ZombieSummonbase)
 		}
 		case 5:
 		{
-			PluginName = "npc_zs_manhattan_parrot";
+			PluginName = "npc_zs_amplification";
 			enemy.Is_Boss = 1;
 		}
 		case 6:
 		{
-			PluginName = "npc_zs_hmo";
+			PluginName = "npc_zs_howler";
 			enemy.Is_Boss = 1;
 		}
 		case 7:
 		{
-			PluginName = "npc_zs_amplification";
+			PluginName = "npc_zs_zombine";
 			enemy.Is_Boss = 1;
 		}
 		case 8:
 		{
-			PluginName = "npc_zs_howler";
-			enemy.Is_Boss = 1;
-		}
-		case 9:
-		{
-			PluginName = "npc_zs_zombine";
-			enemy.Is_Boss = 1;
-		}
-		case 10:
-		{
 			PluginName = "npc_zs_bonemesh";
 			enemy.Is_Boss = 1;
 		}
-		case 11:
+		case 9:
 		{
 			PluginName = "npc_zs_red_marrow";
 			enemy.Is_Boss = 1;

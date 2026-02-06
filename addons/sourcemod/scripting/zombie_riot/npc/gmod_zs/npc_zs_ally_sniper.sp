@@ -408,8 +408,8 @@ int AllySniperSelfDefense(AllySniper npc, float gameTime)
 
 	if(gameTime > npc.m_flNextMeleeAttack)
 	{
-		npc.m_flAttackHappens = gameTime + 0.0;
-		npc.m_flDoingAnimation = gameTime + 0.95;
+		npc.m_flAttackHappens = gameTime + 0.2;
+		npc.m_flDoingAnimation = gameTime + 0.2;
 		npc.m_flNextMeleeAttack = gameTime + 1.75;
 	}
 	return 1;
